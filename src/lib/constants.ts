@@ -13,6 +13,16 @@ export const MAX_CAPACITY = 20;
 export const MIN_TABLES = 1;
 export const MAX_TABLES = 20;
 
+/** Per-table visual size factor (RF-37). Capacity is untouched. */
+export const MIN_TABLE_SCALE = 0.75;
+export const MAX_TABLE_SCALE = 2;
+export const TABLE_SCALE_STEP = 0.25;
+
+/** Canvas zoom (RF-36). UI state only, never persisted. */
+export const MIN_ZOOM = 0.5;
+export const MAX_ZOOM = 2;
+export const ZOOM_STEP = 0.1;
+
 /** Above this URL length the share dialog shows the copy button instead of a QR (qrcode.react throws past the byte-mode ceiling). */
 export const QR_MAX_URL = 1200;
 

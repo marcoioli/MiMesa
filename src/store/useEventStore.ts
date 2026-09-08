@@ -4,8 +4,10 @@ import { persist } from 'zustand/middleware';
 import {
   MAX_CAPACITY,
   MAX_TABLES,
+  MAX_TABLE_SCALE,
   MIN_CAPACITY,
   MIN_TABLES,
+  MIN_TABLE_SCALE,
   PERSIST_KEY,
   PERSIST_VERSION,
 } from '../lib/constants';
@@ -25,6 +27,8 @@ export type EventActions = {
   removeTable: (tableId: string) => void;
   renameTable: (tableId: string, name: string) => void;
   setTableCapacity: (tableId: string, capacity: number) => void;
+  /** RF-37: visual size factor, clamped to MIN_TABLE_SCALE..MAX_TABLE_SCALE. */
+  setTableScale: (tableId: string, scale: number) => void;
   moveTable: (tableId: string, x: number, y: number) => void;
   clearTable: (tableId: string) => void;
   clearAllTables: () => void;
@@ -185,6 +189,16 @@ export const useEventStore = create<EventState>()(
             if (!trimmed) return event; // RF-08: an empty name keeps the previous one.
             return withTable(event, tableId, (table) =>
               table.name === trimmed ? table : { ...table, name: trimmed },
+            );
+          });
+        },
+
+        setTableScale(tableId, scale) {
+          mutate((event) => {
+            const raw = Number.isFinite(scale) ? scale : 1;
+            const next = Math.round(Math.min(MAX_TABLE_SCALE, Math.max(MIN_TABLE_SCALE, raw)) * 100) / 100;
+            return withTable(event, tableId, (table) =>
+              (table.scale ?? 1) === next ? table : { ...table, scale: next },
             );
           });
         },
