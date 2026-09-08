@@ -23,6 +23,10 @@ Todo lo que rodea al plano: el formulario para crear el evento, la barra superio
 - Arrastre: envolvé cada tarjeta del panel con `GuestDraggable` de `src/app/dnd/GuestDraggable.tsx` pasando `guestId` y `from: null`. Con eso el arrastre al plano funciona solo, porque el track B ya maneja los drops.
 - Confirmaciones: `ConfirmDialog` de `src/app/ConfirmDialog.tsx`. Avisos: `toast()` de `src/app/useToastStore.ts`.
 
+## Logo
+
+Usá `/logo-mark.svg` (28 px) al lado del texto "MiMesa" en la barra superior, como ya está en el placeholder, y `/logo.svg` en el encabezado del formulario de creación. Detalle en `DESIGN.md`, sección "Logo".
+
 ## Pantallas a copiar
 
 - `docs/design/CrearEvento.dc.html`: formulario y plantillas (A.1).

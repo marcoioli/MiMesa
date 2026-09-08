@@ -24,6 +24,10 @@ La salida del producto: el diálogo "Compartir" con link y QR, la vista del invi
 - Dibujo de la mesa en la vista del invitado: el `TableView` congelado de `src/features/tables/TableView.tsx`, en modo solo lectura: pasá `name`, `capacity`, `seatNames` y `highlightSeatIndex`, sin slots, sin nada de dnd-kit.
 - Store: solo en el editor (`ShareButton`, `ExportButton`). **En `/invitado` nunca se importa `useEventStore`**: esa ruta lee únicamente el fragmento de la URL.
 
+## Logo
+
+En la vista del invitado usá `/logo-mark.svg` (20 px) junto al texto "MiMesa" en el encabezado, como en el mockup. Detalle en `DESIGN.md`, sección "Logo".
+
 ## Pantallas a copiar
 
 - `docs/design/Compartir.dc.html`: diálogo con link, "Copiar link", QR y nota (C.3, C.8).

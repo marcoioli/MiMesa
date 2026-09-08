@@ -1,3 +1,5 @@
+<p align="center"><img src="public/logo.png" alt="MiMesa" width="180"></p>
+
 # MiMesa
 
 Armador de distribución de mesas para eventos. El organizador crea un evento, elige una plantilla de mesas, pega la lista de invitados y los arrastra a las sillas. Al terminar comparte un link: cada invitado lo abre, busca su nombre y ve su mesa y con quién se sienta.

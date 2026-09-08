@@ -2,6 +2,18 @@
 
 Source of truth for the UI. Mockups: `docs/design/*.dc.html` (published canvas "MiMesa Pantallas"). Mode: Operate (a tool, not a brochure). Direction chosen by the user: clean tool-like interface, cool neutrals, one accent.
 
+## Logo
+
+Files in `public/`, served from the site root:
+
+| File | What | Where to use it |
+|---|---|---|
+| `/logo-mark.svg` | The table-with-chairs mark only, square | Topbar (28px, next to the "MiMesa" wordmark in text), guest view header (20px), favicon. Use `<img src="/logo-mark.svg" alt="">` with the wordmark as real text beside it. |
+| `/logo.svg` | Mark plus "miMesa" wordmark, square 1000x1000 | Create-event screen header, dialogs that need the full brand. |
+| `/logo.png` | Same as `logo.svg`, raster 1254x1254 | Link previews (`og:image`), apple touch icon, README. |
+
+Never recolor, stretch or add effects to the logo. Keep at least its own height of clear space around it.
+
 ## Tokens
 
 Declare these in `src/index.css` under `@theme` so Tailwind v4 exposes them as utilities (`bg-ground`, `text-ink-3`, `border-line`, `bg-accent`, ...).

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+<defs>
+  <linearGradient id="table" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#8B5CF6"/><stop offset="55%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#6D28D9"/>
+  </linearGradient>
+  <linearGradient id="chair" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#D8B4FE"/><stop offset="100%" stop-color="#A855F7"/>
+  </linearGradient>
+  <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#9F67EA"/><stop offset="100%" stop-color="#7C3AED"/>
+  </linearGradient>
+</defs>
+
+<g transform="translate(500 335)">
+  <path fill="url(#table)" fill-rule="evenodd" d="
+    M0,-155 A155,155 0 1,1 0,155 A155,155 0 1,1 0,-155 Z
+    M0,-70 A70,70 0 1,0 0,70 A70,70 0 1,0 0,-70 Z"/>
+  <path d="M-95,-70 A120,120 0 0,1 -35,-120" fill="none" stroke="#C4A2FF" stroke-width="16" stroke-linecap="round" opacity=".9"/>
+
+  <g transform="translate(0,-220)">
+    <rect x="-58" y="-36" width="116" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M-58,12 Q0,-2 58,12 L58,28 Q58,36 50,36 H-50 Q-58,36 -58,28 Z" fill="url(#shade)"/>
+  </g>
+  <g transform="translate(0,220)">
+    <rect x="-58" y="-36" width="116" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M-58,-12 Q0,2 58,-12 L58,-28 Q58,-36 50,-36 H-50 Q-58,-36 -58,-28 Z" fill="url(#shade)"/>
+  </g>
+
+  <g transform="translate(-175,-125) rotate(-45)">
+    <rect x="-50" y="-36" width="100" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M10,-36 Q0,0 10,36 H32 Q48,36 50,20 V-20 Q48,-36 32,-36 Z" fill="url(#shade)"/>
+  </g>
+  <g transform="translate(175,-125) rotate(45)">
+    <rect x="-50" y="-36" width="100" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M-10,-36 Q0,0 -10,36 H-32 Q-48,36 -50,20 V-20 Q-48,-36 -32,-36 Z" fill="url(#shade)"/>
+  </g>
+  <g transform="translate(-175,125) rotate(45)">
+    <rect x="-50" y="-36" width="100" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M10,-36 Q0,0 10,36 H32 Q48,36 50,20 V-20 Q48,-36 32,-36 Z" fill="url(#shade)"/>
+  </g>
+  <g transform="translate(175,125) rotate(-45)">
+    <rect x="-50" y="-36" width="100" height="72" rx="28" fill="url(#chair)"/>
+    <path d="M-10,-36 Q0,0 -10,36 H-32 Q-48,36 -50,20 V-20 Q-48,-36 -32,-36 Z" fill="url(#shade)"/>
+  </g>
+</g>
+
+<text x="500" y="790" text-anchor="middle"
+      font-family="Arial Rounded MT Bold, Nunito Sans, Inter, Arial, sans-serif"
+      font-size="170" font-weight="700" letter-spacing="-7">
+  <tspan fill="#4A4A4F" font-weight="500">mi</tspan><tspan fill="#17171B">Mesa</tspan>
+</text>
+</svg>
