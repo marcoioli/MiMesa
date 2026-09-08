@@ -72,6 +72,10 @@ Known traps (each one has bitten a real project):
 - Open the PR against `main` using the template in `.github/pull_request_template.md`: list the requirement ids done, the manual checks performed, and confirm `tsc` and `build` pass. Keep PRs reviewable: if a track grows past roughly 800 changed lines, split it into two PRs by task groups.
 - Do not push, open PRs or merge unless the user asks you to.
 
-## 7. Optional: gentle-ai / SDD tooling
+## 7. Optional: CodeGraph
+
+If `codegraph` is installed, run `codegraph init` once in your clone (the `.codegraph/` index is per checkout and git-ignored). Then answer structural questions ("who calls `seatGuest`?", "what breaks if I change `TableView`?") with `codegraph explore <symbol>`, `codegraph callers <symbol>`, `codegraph impact <symbol>` before grepping through files. The watcher keeps the index in sync as you edit.
+
+## 8. Optional: gentle-ai / SDD tooling
 
 The `openspec/` folder is a Spec-Driven Development change named `mimesa-mvp`. If `gentle-ai` is installed, `gentle-ai sdd-status mimesa-mvp --cwd .` prints the structured status. It is not required; the files above are the contract regardless of tooling.
