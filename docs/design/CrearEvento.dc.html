@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root{--bg:#f4f6fa;--panel:#ffffff;--ink:#1c2230;--ink-2:#4b5566;--ink-3:#7a8497;--line:#e3e7ee;--line-2:#cfd5df;--accent:#4f46e5;--accent-soft:#eef0ff;--empty:#94a3b8;--empty-soft:#f1f4f8}
+    body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)} a:hover{color:#3730a3}
+    ::selection{background:var(--accent-soft);color:var(--ink)}
+    *{box-sizing:border-box}
+    .lbl{font-weight:700;font-size:12px;color:var(--ink-2)}
+    .field{display:flex;align-items:center;height:38px;padding:0 12px;border:1px solid var(--line-2);border-radius:8px;background:var(--panel);font-weight:500;color:var(--ink)}
+    .field.ph{color:var(--ink-3)}
+    .tpl{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel)}
+    .tpl.sel{border:2px solid var(--accent);background:var(--accent-soft);padding:11px 13px}
+    .tpl b{font-size:14px;font-weight:800;letter-spacing:-.01em}
+    .tpl span{font-size:12px;color:var(--ink-3)}
+    .mini{position:relative;width:48px;height:48px}
+    .mini .d{position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--empty);background:var(--empty-soft)}
+    .mini .s{position:absolute;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);border:1px dashed var(--line-2);background:var(--panel)}
+  </style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; flex-direction: column; background: #f4f6fa">
+  <header style="height: 56px; flex: 0 0 56px; display: flex; align-items: center; gap: 10px; padding: 0 20px; background: #ffffff; border-bottom: 1px solid #e3e7ee">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="1.75"><circle cx="12" cy="12" r="5.5"></circle><circle cx="12" cy="2.75" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="21.25" cy="12" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="12" cy="21.25" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="2.75" cy="12" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="18.5" cy="5.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="18.5" cy="18.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="5.5" cy="18.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="5.5" cy="5.5" r="1.4" fill="#4f46e5" stroke="none"></circle></svg>
+    <span style="font-weight: 800; font-size: 15px; letter-spacing: -0.02em">MiMesa</span>
+  </header>
+
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px">
+    <div style="width: 1000px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1px solid #e3e7ee; border-radius: 14px; background: #ffffff; overflow: hidden; box-shadow: 0 1px 2px rgba(20,28,45,.06), 0 24px 48px -24px rgba(20,28,45,.2)">
+
+      <div style="padding: 36px 40px; display: flex; flex-direction: column; gap: 22px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance">Armá las mesas de tu evento</h1>
+          <p style="margin: 0; color: #7a8497; font-weight: 500">Creá el evento, elegí cuántas mesas y después arrastrá a cada invitado a su silla.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Nombre del evento</span><div class="field">Casamiento Ana y Juan</div></div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+            <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Fecha</span><div class="field" style="justify-content: space-between">20/11/2026<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7a8497" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg></div></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Lugar (opcional)</span><div class="field">Salón Sur</div></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span class="lbl">Plantilla de mesas</span>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+            <div class="tpl sel"><b>6 mesas de 8</b><span>48 sillas</span></div>
+            <div class="tpl"><b>10 mesas de 10</b><span>100 sillas</span></div>
+            <div class="tpl"><b>8 mesas de 6</b><span>48 sillas</span></div>
+            <div class="tpl"><b>Personalizado</b><span>Cantidad de mesas y capacidad</span></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; opacity: 0.45">
+            <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Cantidad de mesas</span><div class="field ph">1 a 20</div></div>
+            <div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Capacidad</span><div class="field ph">2 a 20</div></div>
+          </div>
+        </div>
+
+        <button style="align-self: flex-start; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid #4f46e5; background: #4f46e5; color: #ffffff; font: 700 14px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Crear evento</button>
+      </div>
+
+      <div style="background: #f4f6fa; border-left: 1px solid #e3e7ee; padding: 36px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; align-items: baseline; justify-content: space-between">
+          <span style="font-weight: 800; font-size: 13px; color: #4b5566">Así queda el plano</span>
+          <span style="font-size: 12px; color: #7a8497; font-weight: 600">6 mesas · 48 sillas</span>
+        </div>
+        <div style="flex: 1; border: 1px solid #e3e7ee; border-radius: 10px; background-color: #ffffff; background-image: radial-gradient(#dfe4ee 1px, transparent 1px); background-size: 20px 20px; background-position: 10px 10px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 40px 48px; align-content: start; justify-items: center">
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+          <div class="mini"><div class="d"></div><div class="s" style="left:50%;top:6px"></div><div class="s" style="left:76%;top:24%"></div><div class="s" style="left:42px;top:50%"></div><div class="s" style="left:76%;top:76%"></div><div class="s" style="left:50%;top:42px"></div><div class="s" style="left:24%;top:76%"></div><div class="s" style="left:6px;top:50%"></div><div class="s" style="left:24%;top:24%"></div></div>
+        </div>
+        <p style="margin: 0; font-size: 12px; color: #7a8497; font-weight: 500; line-height: 1.5">Después vas a poder agregar, quitar y renombrar mesas, y moverlas por el plano.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

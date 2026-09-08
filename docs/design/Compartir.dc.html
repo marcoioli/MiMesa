@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root{--bg:#f4f6fa;--panel:#ffffff;--ink:#1c2230;--ink-2:#4b5566;--ink-3:#7a8497;--line:#e3e7ee;--line-2:#cfd5df;--accent:#4f46e5;--accent-soft:#eef0ff}
+    body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)} a:hover{color:#3730a3}
+    *{box-sizing:border-box}
+  </style>
+</helmet>
+<div style="width: 640px; height: 640px; background: rgba(28,34,48,.45); display: flex; align-items: center; justify-content: center">
+  <div style="width: 480px; background: #ffffff; border-radius: 14px; box-shadow: 0 1px 2px rgba(20,28,45,.06), 0 32px 64px -24px rgba(20,28,45,.45); display: flex; flex-direction: column; overflow: hidden">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 0">
+      <h2 style="margin: 0; font-size: 18px; font-weight: 800; letter-spacing: -0.02em">Compartir</h2>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a8497" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </div>
+    <p style="margin: 6px 20px 0; color: #7a8497; font-weight: 500; line-height: 1.5">Cada invitado abre el link, busca su nombre y ve en qué mesa está y con quién.</p>
+
+    <div style="margin: 18px 20px 0; display: flex; gap: 8px">
+      <div style="flex: 1; display: flex; align-items: center; height: 38px; padding: 0 12px; border: 1px solid #cfd5df; border-radius: 8px; background: #f4f6fa; font-weight: 500; color: #4b5566; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-variant-ligatures: none">mimesa.vercel.app/invitado#N4IgLgngDgpiBcIDKB7A5gAgEYCcBjAWwEsA7ANwEMCB…</div>
+      <button style="display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #4f46e5; background: #4f46e5; color: #ffffff; font: 700 13px/1 Manrope, 'Segoe UI', system-ui, sans-serif; white-space: nowrap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>Copiar link</button>
+    </div>
+
+    <div style="margin: 20px 20px 0; display: flex; gap: 20px; align-items: center">
+      <div style="width: 176px; height: 176px; padding: 8px; border: 1px solid #e3e7ee; border-radius: 10px; background: #ffffff; flex: 0 0 176px">
+        <svg width="160" height="160" viewBox="0 0 25 25" shape-rendering="crispEdges" fill="#1c2230">
+          <rect x="0" y="0" width="7" height="7"></rect><rect x="1" y="1" width="5" height="5" fill="#fff"></rect><rect x="2" y="2" width="3" height="3"></rect>
+          <rect x="18" y="0" width="7" height="7"></rect><rect x="19" y="1" width="5" height="5" fill="#fff"></rect><rect x="20" y="2" width="3" height="3"></rect>
+          <rect x="0" y="18" width="7" height="7"></rect><rect x="1" y="19" width="5" height="5" fill="#fff"></rect><rect x="2" y="20" width="3" height="3"></rect>
+          <rect x="8" y="0" width="1" height="1"></rect><rect x="10" y="0" width="1" height="1"></rect><rect x="13" y="0" width="2" height="1"></rect><rect x="16" y="0" width="1" height="1"></rect>
+          <rect x="9" y="1" width="2" height="1"></rect><rect x="12" y="1" width="1" height="1"></rect><rect x="15" y="1" width="1" height="1"></rect>
+          <rect x="8" y="2" width="1" height="1"></rect><rect x="11" y="2" width="3" height="1"></rect><rect x="16" y="2" width="1" height="1"></rect>
+          <rect x="10" y="3" width="1" height="1"></rect><rect x="13" y="3" width="1" height="1"></rect><rect x="15" y="3" width="2" height="1"></rect>
+          <rect x="8" y="4" width="2" height="1"></rect><rect x="12" y="4" width="2" height="1"></rect><rect x="16" y="4" width="1" height="1"></rect>
+          <rect x="9" y="5" width="1" height="1"></rect><rect x="11" y="5" width="1" height="1"></rect><rect x="14" y="5" width="2" height="1"></rect>
+          <rect x="8" y="6" width="1" height="1"></rect><rect x="10" y="6" width="1" height="1"></rect><rect x="12" y="6" width="1" height="1"></rect><rect x="14" y="6" width="1" height="1"></rect><rect x="16" y="6" width="1" height="1"></rect>
+          <rect x="0" y="8" width="1" height="1"></rect><rect x="2" y="8" width="2" height="1"></rect><rect x="5" y="8" width="1" height="1"></rect><rect x="7" y="8" width="2" height="1"></rect><rect x="11" y="8" width="1" height="1"></rect><rect x="13" y="8" width="2" height="1"></rect><rect x="17" y="8" width="1" height="1"></rect><rect x="19" y="8" width="2" height="1"></rect><rect x="22" y="8" width="1" height="1"></rect><rect x="24" y="8" width="1" height="1"></rect>
+          <rect x="1" y="9" width="1" height="1"></rect><rect x="4" y="9" width="1" height="1"></rect><rect x="6" y="9" width="1" height="1"></rect><rect x="9" y="9" width="2" height="1"></rect><rect x="12" y="9" width="1" height="1"></rect><rect x="15" y="9" width="2" height="1"></rect><rect x="18" y="9" width="1" height="1"></rect><rect x="21" y="9" width="1" height="1"></rect><rect x="23" y="9" width="1" height="1"></rect>
+          <rect x="0" y="10" width="2" height="1"></rect><rect x="3" y="10" width="1" height="1"></rect><rect x="5" y="10" width="2" height="1"></rect><rect x="8" y="10" width="1" height="1"></rect><rect x="11" y="10" width="2" height="1"></rect><rect x="14" y="10" width="1" height="1"></rect><rect x="16" y="10" width="1" height="1"></rect><rect x="19" y="10" width="1" height="1"></rect><rect x="21" y="10" width="3" height="1"></rect>
+          <rect x="2" y="11" width="1" height="1"></rect><rect x="4" y="11" width="1" height="1"></rect><rect x="7" y="11" width="1" height="1"></rect><rect x="9" y="11" width="1" height="1"></rect><rect x="13" y="11" width="1" height="1"></rect><rect x="15" y="11" width="1" height="1"></rect><rect x="17" y="11" width="2" height="1"></rect><rect x="20" y="11" width="1" height="1"></rect><rect x="24" y="11" width="1" height="1"></rect>
+          <rect x="0" y="12" width="1" height="1"></rect><rect x="3" y="12" width="2" height="1"></rect><rect x="6" y="12" width="1" height="1"></rect><rect x="8" y="12" width="2" height="1"></rect><rect x="11" y="12" width="1" height="1"></rect><rect x="14" y="12" width="2" height="1"></rect><rect x="18" y="12" width="1" height="1"></rect><rect x="20" y="12" width="2" height="1"></rect><rect x="23" y="12" width="1" height="1"></rect>
+          <rect x="1" y="13" width="2" height="1"></rect><rect x="5" y="13" width="1" height="1"></rect><rect x="7" y="13" width="1" height="1"></rect><rect x="10" y="13" width="1" height="1"></rect><rect x="12" y="13" width="2" height="1"></rect><rect x="16" y="13" width="1" height="1"></rect><rect x="19" y="13" width="1" height="1"></rect><rect x="22" y="13" width="1" height="1"></rect><rect x="24" y="13" width="1" height="1"></rect>
+          <rect x="0" y="14" width="1" height="1"></rect><rect x="2" y="14" width="1" height="1"></rect><rect x="4" y="14" width="2" height="1"></rect><rect x="8" y="14" width="1" height="1"></rect><rect x="11" y="14" width="2" height="1"></rect><rect x="15" y="14" width="1" height="1"></rect><rect x="17" y="14" width="1" height="1"></rect><rect x="20" y="14" width="1" height="1"></rect><rect x="23" y="14" width="2" height="1"></rect>
+          <rect x="1" y="15" width="1" height="1"></rect><rect x="3" y="15" width="1" height="1"></rect><rect x="6" y="15" width="2" height="1"></rect><rect x="9" y="15" width="1" height="1"></rect><rect x="13" y="15" width="1" height="1"></rect><rect x="16" y="15" width="2" height="1"></rect><rect x="19" y="15" width="1" height="1"></rect><rect x="21" y="15" width="1" height="1"></rect>
+          <rect x="0" y="16" width="2" height="1"></rect><rect x="4" y="16" width="1" height="1"></rect><rect x="7" y="16" width="1" height="1"></rect><rect x="10" y="16" width="2" height="1"></rect><rect x="14" y="16" width="1" height="1"></rect><rect x="16" y="16" width="1" height="1"></rect><rect x="18" y="16" width="2" height="1"></rect><rect x="22" y="16" width="2" height="1"></rect>
+          <rect x="8" y="17" width="1" height="1"></rect><rect x="12" y="17" width="1" height="1"></rect><rect x="15" y="17" width="2" height="1"></rect><rect x="18" y="17" width="1" height="1"></rect><rect x="20" y="17" width="1" height="1"></rect><rect x="23" y="17" width="1" height="1"></rect>
+          <rect x="9" y="18" width="2" height="1"></rect><rect x="13" y="18" width="1" height="1"></rect><rect x="16" y="18" width="3" height="1"></rect><rect x="20" y="18" width="1" height="1"></rect><rect x="22" y="18" width="1" height="1"></rect>
+          <rect x="8" y="19" width="1" height="1"></rect><rect x="11" y="19" width="1" height="1"></rect><rect x="14" y="19" width="2" height="1"></rect><rect x="17" y="19" width="1" height="1"></rect><rect x="19" y="19" width="1" height="1"></rect><rect x="21" y="19" width="1" height="1"></rect><rect x="24" y="19" width="1" height="1"></rect>
+          <rect x="10" y="20" width="1" height="1"></rect><rect x="12" y="20" width="2" height="1"></rect><rect x="16" y="20" width="1" height="1"></rect><rect x="18" y="20" width="1" height="1"></rect><rect x="20" y="20" width="3" height="1"></rect>
+          <rect x="8" y="21" width="2" height="1"></rect><rect x="11" y="21" width="1" height="1"></rect><rect x="15" y="21" width="1" height="1"></rect><rect x="17" y="21" width="2" height="1"></rect><rect x="21" y="21" width="1" height="1"></rect><rect x="23" y="21" width="1" height="1"></rect>
+          <rect x="9" y="22" width="1" height="1"></rect><rect x="12" y="22" width="1" height="1"></rect><rect x="14" y="22" width="2" height="1"></rect><rect x="16" y="22" width="1" height="1"></rect><rect x="19" y="22" width="2" height="1"></rect><rect x="24" y="22" width="1" height="1"></rect>
+          <rect x="8" y="23" width="1" height="1"></rect><rect x="10" y="23" width="2" height="1"></rect><rect x="13" y="23" width="1" height="1"></rect><rect x="17" y="23" width="1" height="1"></rect><rect x="20" y="23" width="1" height="1"></rect><rect x="22" y="23" width="1" height="1"></rect>
+          <rect x="9" y="24" width="1" height="1"></rect><rect x="11" y="24" width="1" height="1"></rect><rect x="14" y="24" width="2" height="1"></rect><rect x="18" y="24" width="2" height="1"></rect><rect x="21" y="24" width="1" height="1"></rect><rect x="23" y="24" width="2" height="1"></rect>
+        </svg>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em">Mostralo en pantalla</span>
+        <p style="margin: 0; color: #7a8497; font-weight: 500; line-height: 1.5">Los invitados escanean el QR con el celular y entran directo a la búsqueda.</p>
+        <p style="margin: 6px 0 0; color: #7a8497; font-weight: 500; font-size: 12px; line-height: 1.5">El link incluye solo a los invitados ya sentados. Si cambiás algo, generá uno nuevo.</p>
+      </div>
+    </div>
+
+    <div style="margin: 20px 0 0; padding: 12px 20px; background: #f4f6fa; border-top: 1px solid #e3e7ee; display: flex; justify-content: flex-end">
+      <button style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #cfd5df; background: #ffffff; color: #1c2230; font: 700 13px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Cerrar</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

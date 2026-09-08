@@ -1,0 +1,16 @@
+{
+  "artboards": [
+    { "file": "CrearEvento.dc.html", "title": "1 · Crear evento", "x": 0, "y": 0, "w": 1440, "h": 900 },
+    { "file": "Main.dc.html", "title": "2 · Editor", "x": 1540, "y": 0, "w": 1440, "h": 900 },
+    { "file": "Menus.dc.html", "title": "3 · Menús y estados", "x": 0, "y": 1040, "w": 1120, "h": 620 },
+    { "file": "Compartir.dc.html", "title": "4 · Compartir", "x": 1220, "y": 1040, "w": 640, "h": 640 },
+    { "file": "Invitado.dc.html", "title": "5 · Invitado: búsqueda", "x": 1960, "y": 1040, "w": 390, "h": 844 },
+    { "file": "InvitadoResultado.dc.html", "title": "6 · Invitado: resultado", "x": 2450, "y": 1040, "w": 390, "h": 844 }
+  ],
+  "annotations": [
+    { "id": "nota-flujo", "x": 0, "y": -170, "w": 520, "text": "Flujo del organizador: 1 crear evento → 2 editor (arrastrar invitados a sillas) → 4 compartir. Flujo del invitado: 5 buscar nombre → 6 ver mesa.\nDatos ficticios. Tamaños reales: mesas de 120px (capacidad 8), sillas de 28px, sidebar 300px, topbar 56px." },
+    { "id": "nota-tracks", "x": 1540, "y": -170, "w": 520, "text": "Reparto: Track A = topbar, formulario y panel de invitados. Track B = plano, mesas, sillas, drag & drop y menús (artboard 3). Track C = compartir (4), vista del invitado (5 y 6) y exportar PNG." },
+    { "id": "nota-tokens", "x": 1220, "y": 1720, "w": 620, "text": "Tokens: fondo #f4f6fa · panel #ffffff · texto #1c2230 · secundario #4b5566 · terciario #7a8497 · línea #e3e7ee · borde control #cfd5df · acento #4f46e5 (+ #eef0ff suave) · ocupación vacía #94a3b8, parcial #f59e0b, completa #10b981 · silla ocupada #dfe4ee (borde #c7ceda) · error #dc2626 (fondo #fdecec). Tipografía: Manrope 500/600/700/800. Radio 8px controles, 10-14px paneles." }
+  ],
+  "launch": { "view": "canvas" }
+}

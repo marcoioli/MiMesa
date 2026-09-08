@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root{--bg:#f4f6fa;--panel:#ffffff;--ink:#1c2230;--ink-2:#4b5566;--ink-3:#7a8497;--line:#e3e7ee;--line-2:#cfd5df;--accent:#4f46e5;--accent-soft:#eef0ff;--empty:#94a3b8;--empty-soft:#f1f4f8;--partial:#f59e0b;--partial-soft:#fff4e0;--danger:#dc2626;--shadow:0 1px 2px rgba(20,28,45,.06),0 12px 32px -12px rgba(20,28,45,.28)}
+    body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)} a:hover{color:#3730a3}
+    *{box-sizing:border-box}
+    .table{position:absolute}
+    .disc{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:2px solid var(--partial);background:var(--partial-soft)}
+    .tname{font-size:11px;font-weight:800;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
+    .tocc{font-size:10px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+    .seat{position:absolute;width:28px;height:28px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.02em;border:1.5px dashed var(--line-2);background:var(--panel);color:var(--ink-2)}
+    .seat.on{border:1.5px solid #c7ceda;background:#dfe4ee;color:var(--ink)}
+    .seat.sel{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent)}
+    .pop{position:absolute;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+    .item{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;font-weight:600;color:var(--ink)}
+    .item svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+    .item.danger{color:var(--danger)}
+    .row{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;font-weight:600}
+    .row .av{width:22px;height:22px;border-radius:50%;background:var(--empty-soft);color:var(--ink-2);font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center}
+    .row.hover{background:var(--accent-soft)}
+    .cap{padding:10px 12px 6px;font-size:11px;font-weight:800;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase}
+  </style>
+</helmet>
+<div style="width: 1120px; height: 620px; background-color: #f4f6fa; background-image: radial-gradient(#d5dbe5 1px, transparent 1px); background-size: 24px 24px; background-position: 12px 12px; position: relative; overflow: hidden">
+
+  <div style="position: absolute; left: 32px; top: 24px; font-size: 12px; font-weight: 700; color: #7a8497">Click en una silla vacía</div>
+  <div class="table" style="left: 60px; top: 110px; width: 120px; height: 120px">
+    <div class="disc" style="width: 64px; height: 64px"><span class="tname">Amigas</span><span class="tocc">5/8</span></div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">MC</div>
+    <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">VP</div>
+    <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">LG</div>
+    <div class="seat sel" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+    <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 46px)"></div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">AB</div>
+    <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">SM</div>
+  </div>
+  <div class="pop" style="left: 210px; top: 118px; width: 260px">
+    <div class="cap">Sentar invitado</div>
+    <div style="margin: 0 12px 8px; display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 10px; border: 1px solid #cfd5df; border-radius: 8px; color: #7a8497; font-weight: 500">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Buscar invitado
+    </div>
+    <div class="row hover"><span class="av">LF</span>Lucía Fernández</div>
+    <div class="row"><span class="av">MG</span>Martín Gómez</div>
+    <div class="row"><span class="av">SP</span>Sofía Pereyra</div>
+    <div class="row"><span class="av">TA</span>Tomás Aguirre</div>
+    <div class="row" style="color: #7a8497; height: 28px">+ 13 más</div>
+    <div style="border-top: 1px solid #e3e7ee; padding: 10px 12px 12px; display: flex; gap: 8px">
+      <div style="flex: 1; display: flex; align-items: center; height: 32px; padding: 0 10px; border: 1px dashed #cfd5df; border-radius: 8px; color: #7a8497; font-weight: 500">Nuevo invitado</div>
+      <button style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #4f46e5; background: #4f46e5; color: #ffffff; font: 700 12px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Sentar</button>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 540px; top: 24px; font-size: 12px; font-weight: 700; color: #7a8497">Click en un invitado sentado</div>
+  <div class="table" style="left: 570px; top: 110px; width: 120px; height: 120px">
+    <div class="disc" style="width: 64px; height: 64px"><span class="tname">Mesa 2</span><span class="tocc">6/8</span></div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">GS</div>
+    <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">MS</div>
+    <div class="seat sel" style="left: calc(50% + 46px); top: calc(50% + 0px)">FB</div>
+    <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">RB</div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">IN</div>
+    <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">CN</div>
+  </div>
+  <div class="pop" style="left: 720px; top: 140px; width: 210px; padding: 6px 0">
+    <div style="padding: 6px 12px 8px; font-weight: 800">Fede Bianchi</div>
+    <div class="item"><svg viewBox="0 0 24 24"><path d="M15 3H9a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"></path><path d="M10 12h11"></path><path d="m18 9 3 3-3 3"></path></svg>Quitar de la mesa</div>
+    <div class="item danger"><svg viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>Eliminar invitado</div>
+  </div>
+
+  <div style="position: absolute; left: 540px; top: 290px; font-size: 12px; font-weight: 700; color: #7a8497">Menú de la mesa (click derecho o botón ···)</div>
+  <div class="pop" style="left: 570px; top: 320px; width: 300px; padding: 6px 0">
+    <div style="padding: 6px 12px 8px; display: flex; align-items: center; justify-content: space-between">
+      <span style="font-weight: 800; border-bottom: 1.5px dashed #cfd5df">Mesa 2</span>
+      <span style="font-size: 11px; color: #7a8497; font-weight: 600">doble click para renombrar</span>
+    </div>
+    <div class="item" style="justify-content: space-between"><span style="display: flex; align-items: center; gap: 8px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><path d="M12 8v8M8 12h8"></path></svg>Capacidad</span><span style="display: flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums"><span style="width: 24px; height: 24px; border: 1px solid #cfd5df; border-radius: 6px; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"></path></svg></span>8<span style="width: 24px; height: 24px; border: 1px solid #cfd5df; border-radius: 6px; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></span></div>
+    <div class="item"><svg viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M6 7l1 13h10l1-13"></path><path d="M9 11v6M15 11v6"></path></svg>Vaciar mesa</div>
+    <div class="item danger"><svg viewBox="0 0 24 24"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M19 6l-1 14H6L5 6"></path></svg>Eliminar mesa</div>
+  </div>
+
+  <div style="position: absolute; left: 900px; top: 290px; font-size: 12px; font-weight: 700; color: #7a8497">Agregar mesa</div>
+  <div class="pop" style="left: 900px; top: 320px; width: 190px; padding: 6px 0">
+    <div class="item" style="justify-content: space-between"><span>Capacidad</span><span style="display: flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums"><span style="width: 24px; height: 24px; border: 1px solid #cfd5df; border-radius: 6px; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"></path></svg></span>8<span style="width: 24px; height: 24px; border: 1px solid #cfd5df; border-radius: 6px; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span></span></div>
+    <div style="padding: 6px 12px 8px; display: flex"><button style="flex: 1; height: 32px; border-radius: 8px; border: 1px solid #4f46e5; background: #4f46e5; color: #ffffff; font: 700 12px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Agregar</button></div>
+  </div>
+
+  <div style="position: absolute; left: 540px; top: 480px; font-size: 12px; font-weight: 700; color: #7a8497">Confirmación (nuevo evento, eliminar mesa, vaciar todo, eliminar invitado)</div>
+  <div class="pop" style="left: 570px; top: 506px; width: 360px; padding: 14px 16px; gap: 12px">
+    <div style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em; line-height: 1.35">¿Vaciar todas las mesas? Los invitados vuelven al panel.</div>
+    <div style="display: flex; justify-content: flex-end; gap: 8px">
+      <button style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #cfd5df; background: #ffffff; color: #1c2230; font: 700 12px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Cancelar</button>
+      <button style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #4f46e5; background: #4f46e5; color: #ffffff; font: 700 12px/1 Manrope, 'Segoe UI', system-ui, sans-serif">Confirmar</button>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 32px; top: 440px; font-size: 12px; font-weight: 700; color: #7a8497">Drop rechazado (mesa completa)</div>
+  <div class="table" style="left: 60px; top: 470px; width: 120px; height: 120px">
+    <div class="disc" style="width: 64px; height: 64px; border-color: #dc2626; background: #fdecec; box-shadow: 0 0 0 4px rgba(220,38,38,.15)"><span class="tname">Mesa 1</span><span class="tocc">8/8</span></div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">AR</div>
+    <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">JR</div>
+    <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">ML</div>
+    <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)">PR</div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">CL</div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">EM</div>
+    <div class="seat on" style="left: calc(50% - 46px); top: calc(50% + 0px)">DR</div>
+    <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">LR</div>
+  </div>
+  <div style="position: absolute; left: 210px; top: 502px; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 8px; background: #1c2230; color: #ffffff; font-weight: 600; box-shadow: 0 1px 2px rgba(20,28,45,.06), 0 12px 32px -12px rgba(20,28,45,.4)">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fca5a5" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>La mesa está completa.
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

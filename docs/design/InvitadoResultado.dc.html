@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root{--bg:#f4f6fa;--panel:#ffffff;--ink:#1c2230;--ink-2:#4b5566;--ink-3:#7a8497;--line:#e3e7ee;--line-2:#cfd5df;--accent:#4f46e5;--accent-soft:#eef0ff;--partial:#f59e0b;--partial-soft:#fff4e0}
+    body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)} a:hover{color:#3730a3}
+    *{box-sizing:border-box}
+    .seat{position:absolute;width:44px;height:44px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;letter-spacing:.02em;border:1.5px dashed var(--line-2);background:var(--panel);color:var(--ink-2)}
+    .seat.on{border:1.5px solid #c7ceda;background:#dfe4ee;color:var(--ink)}
+    .seat.me{border:2.5px solid var(--accent);background:var(--accent);color:#fff;box-shadow:0 0 0 5px #eef0ff}
+    .who{display:flex;align-items:center;gap:10px;min-height:38px;font-weight:600}
+    .who .av{width:26px;height:26px;border-radius:50%;background:#dfe4ee;color:var(--ink-2);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  </style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #f4f6fa; display: flex; flex-direction: column; padding: 56px 20px 24px; gap: 20px; overflow: hidden">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <div style="display: flex; align-items: center; gap: 6px; color: #4b5566; font-weight: 700; font-size: 14px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>Buscar otro nombre
+    </div>
+    <span style="font-size: 12px; color: #7a8497; font-weight: 600">Casamiento Ana y Juan</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 4px">
+    <span style="font-weight: 700; color: #7a8497">Hola, Lucía. Estás en la mesa</span>
+    <h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: #4f46e5">Amigas</h1>
+  </div>
+
+  <div style="position: relative; height: 280px; border: 1px solid #e3e7ee; border-radius: 14px; background-color: #ffffff; background-image: radial-gradient(#e3e7ee 1px, transparent 1px); background-size: 20px 20px; background-position: 10px 10px">
+    <div style="position: absolute; left: 50%; top: 50%; width: 176px; height: 176px; transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid #f59e0b; background: #fff4e0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">
+      <span style="font-size: 18px; font-weight: 800; letter-spacing: -0.02em">Amigas</span>
+      <span style="font-size: 13px; font-weight: 700; color: #7a8497; font-variant-numeric: tabular-nums">6 de 8</span>
+    </div>
+    <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 110px)">MC</div>
+    <div class="seat on" style="left: calc(50% + 77.8px); top: calc(50% - 77.8px)">VP</div>
+    <div class="seat on" style="left: calc(50% + 110px); top: calc(50% + 0px)">LG</div>
+    <div class="seat on" style="left: calc(50% + 77.8px); top: calc(50% + 77.8px)">AB</div>
+    <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 110px)"></div>
+    <div class="seat me" style="left: calc(50% - 77.8px); top: calc(50% + 77.8px)">Vos</div>
+    <div class="seat" style="left: calc(50% - 110px); top: calc(50% + 0px)"></div>
+    <div class="seat on" style="left: calc(50% - 77.8px); top: calc(50% - 77.8px)">SM</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 2px; padding: 4px 16px; border: 1px solid #e3e7ee; border-radius: 12px; background: #ffffff">
+    <div style="padding: 10px 0 6px; font-weight: 800; font-size: 13px; color: #7a8497">En tu mesa</div>
+    <div class="who"><span class="av" style="background: #4f46e5; color: #fff">LF</span>Lucía Fernández<span style="margin-left: auto; font-size: 12px; color: #4f46e5; font-weight: 800">vos</span></div>
+    <div class="who"><span class="av">MC</span>Marina Costa</div>
+    <div class="who"><span class="av">VP</span>Victoria Prado</div>
+    <div class="who"><span class="av">LG</span>Laura Giménez</div>
+    <div class="who"><span class="av">AB</span>Antonella Bruno</div>
+    <div class="who"><span class="av">SM</span>Sol Martínez</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

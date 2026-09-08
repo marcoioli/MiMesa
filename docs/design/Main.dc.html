@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<!--
+THESIS: The canvas is the room. Chrome is a thin instrument rail around it; refuses the dashboard-of-cards default and any decorative "event" styling.
+OWN-WORLD: cool slate ground #f4f6fa, white panels, 1px #e3e7ee hairlines, Manrope only, one indigo accent #4f46e5 reserved for actions and drop targets, occupancy as slate/amber/emerald rings, round tables with 28px seats straddling the disc edge.
+STORY: the organizer sees who is still unseated on the left, the tables in the middle, drags people into seats, and shares when done.
+FIRST VIEWPORT: 56px topbar (event, four counters, actions, primary "Compartir" top right); 300px sidebar (search, add, guest chips, paste list); canvas with 8 tables on a 5-column grid, one drag in progress over an accent-ringed seat.
+FORM: user-pinned direction "Herramienta limpia" (Operate mode); no roll run because the user pinned it.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root{--bg:#f4f6fa;--panel:#ffffff;--ink:#1c2230;--ink-2:#4b5566;--ink-3:#7a8497;--line:#e3e7ee;--line-2:#cfd5df;--accent:#4f46e5;--accent-soft:#eef0ff;--empty:#94a3b8;--empty-soft:#f1f4f8;--partial:#f59e0b;--partial-soft:#fff4e0;--full:#10b981;--full-soft:#e6f8f1;--danger:#dc2626;--shadow:0 1px 2px rgba(20,28,45,.06),0 8px 24px -12px rgba(20,28,45,.18)}
+    body{margin:0;font-family:Manrope,"Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased}
+    a{color:var(--accent)} a:hover{color:#3730a3}
+    ::selection{background:var(--accent-soft);color:var(--ink)}
+    *{box-sizing:border-box}
+    .btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--panel);color:var(--ink);font:600 13px/1 Manrope,"Segoe UI",system-ui,sans-serif;white-space:nowrap}
+    .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+    .btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+    .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+    .stat{display:flex;align-items:baseline;gap:5px;font-size:12px;color:var(--ink-3)}
+    .stat b{font-size:15px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+    .chip{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px 0 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-weight:600;color:var(--ink)}
+    .chip .grip{width:14px;height:14px;stroke:var(--line-2);fill:none;stroke-width:2;stroke-linecap:round}
+    .chip .av{width:24px;height:24px;border-radius:50%;background:var(--empty-soft);color:var(--ink-2);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:.02em}
+    .table{position:absolute}
+    .disc{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:2px solid var(--empty);background:var(--empty-soft)}
+    .disc.partial{border-color:var(--partial);background:var(--partial-soft)}
+    .disc.full{border-color:var(--full);background:var(--full-soft)}
+    .tname{font-size:11px;font-weight:800;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
+    .tocc{font-size:10px;font-weight:700;color:var(--ink-3);font-variant-numeric:tabular-nums}
+    .seat{position:absolute;width:28px;height:28px;border-radius:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;letter-spacing:.02em;border:1.5px dashed var(--line-2);background:var(--panel);color:var(--ink-2)}
+    .seat.on{border:1.5px solid #c7ceda;background:#dfe4ee;color:var(--ink)}
+    .seat.target{border:2px solid var(--accent);background:var(--accent-soft);color:var(--accent)}
+    .canvas::-webkit-scrollbar{width:10px;height:10px}
+    .canvas::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:10px;border:2px solid var(--bg)}
+  </style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; flex-direction: column; background: #f4f6fa; overflow: hidden">
+
+  <header style="height: 56px; flex: 0 0 56px; display: flex; align-items: center; gap: 20px; padding: 0 16px 0 20px; background: #ffffff; border-bottom: 1px solid #e3e7ee">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="1.75" stroke-linecap="round"><circle cx="12" cy="12" r="5.5"></circle><circle cx="12" cy="2.75" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="21.25" cy="12" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="12" cy="21.25" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="2.75" cy="12" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="18.5" cy="5.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="18.5" cy="18.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="5.5" cy="18.5" r="1.4" fill="#4f46e5" stroke="none"></circle><circle cx="5.5" cy="5.5" r="1.4" fill="#4f46e5" stroke="none"></circle></svg>
+      <span style="font-weight: 800; font-size: 15px; letter-spacing: -0.02em">MiMesa</span>
+    </div>
+    <div style="width: 1px; height: 24px; background: #e3e7ee"></div>
+    <div style="display: flex; align-items: center; gap: 8px; min-width: 0">
+      <span style="font-weight: 700; font-size: 14px; white-space: nowrap">Casamiento Ana y Juan</span>
+      <span style="color: #7a8497; font-size: 12px; white-space: nowrap">20 nov 2026 · Salón Sur</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a8497" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+    </div>
+    <div style="display: flex; align-items: center; gap: 18px; margin-left: auto">
+      <div class="stat"><b>48</b>invitados</div>
+      <div class="stat"><b>31</b>sentados</div>
+      <div class="stat"><b>17</b>sin ubicar</div>
+      <div class="stat"><b>33</b>sillas libres</div>
+    </div>
+    <div style="width: 1px; height: 24px; background: #e3e7ee"></div>
+    <div style="display: flex; align-items: center; gap: 8px">
+      <button class="btn"><svg viewBox="0 0 24 24"><path d="M16 3h5v5"></path><path d="M4 20 21 3"></path><path d="M21 16v5h-5"></path><path d="m15 15 6 6"></path><path d="M4 4l5 5"></path></svg>Autoubicar</button>
+      <button class="btn ghost">Vaciar todas las mesas</button>
+      <button class="btn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>Exportar PNG</button>
+      <button class="btn primary"><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="m16 6-4-4-4 4"></path><path d="M12 2v13"></path></svg>Compartir</button>
+      <button class="btn ghost"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg>Nuevo evento</button>
+    </div>
+  </header>
+
+  <div style="flex: 1; display: flex; min-height: 0">
+
+    <aside style="width: 300px; flex: 0 0 300px; display: flex; flex-direction: column; background: #ffffff; border-right: 1px solid #e3e7ee">
+      <div style="padding: 16px 16px 10px; display: flex; align-items: baseline; justify-content: space-between">
+        <span style="font-weight: 800; font-size: 14px; letter-spacing: -0.01em">Sin ubicar</span>
+        <span style="font-weight: 700; font-size: 12px; color: #7a8497; font-variant-numeric: tabular-nums">17 de 48</span>
+      </div>
+      <div style="padding: 0 16px 10px; display: flex; flex-direction: column; gap: 8px">
+        <label style="display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px; border: 1px solid #cfd5df; border-radius: 8px; background: #ffffff; color: #7a8497">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <span style="font-weight: 500">Buscar invitado</span>
+        </label>
+        <div style="display: flex; gap: 8px">
+          <div style="flex: 1; display: flex; align-items: center; height: 34px; padding: 0 10px; border: 1px dashed #cfd5df; border-radius: 8px; color: #7a8497; font-weight: 500">Agregar invitado</div>
+          <button class="btn" style="padding: 0 10px"><svg viewBox="0 0 24 24"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg></button>
+        </div>
+      </div>
+      <div style="flex: 1; overflow: hidden; padding: 4px 16px 0; display: flex; flex-direction: column; gap: 6px; position: relative">
+        <div class="chip" style="background: #f4f6fa"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">MG</span>Martín Gómez<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a8497" stroke-width="2" stroke-linecap="round" style="margin-left: auto"><path d="M6 6l12 12M18 6 6 18"></path></svg></div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">SP</span>Sofía Pereyra</div>
+        <div class="chip" style="border-style: dashed; color: #7a8497; background: #f4f6fa"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">LF</span>Lucía Fernández</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">TA</span>Tomás Aguirre</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">VR</span>Valentina Ríos</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">BC</span>Bruno Castro</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">CD</span>Camila Duarte</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">NH</span>Nicolás Herrera</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">JM</span>Julieta Molina</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">FS</span>Facundo Sosa</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">AL</span>Agustina Luna</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">RI</span>Ramiro Ibáñez</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">FV</span>Florencia Vega</div>
+        <div class="chip"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av">JP</span>Joaquín Paz</div>
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 48px; background: linear-gradient(to bottom, rgba(255,255,255,0), #ffffff)"></div>
+      </div>
+      <div style="border-top: 1px solid #e3e7ee; padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 8px">
+        <span style="font-weight: 700; font-size: 12px; color: #4b5566">Cargar lista</span>
+        <div style="height: 64px; padding: 8px 10px; border: 1px solid #cfd5df; border-radius: 8px; color: #7a8497; font-weight: 500; line-height: 1.5">Un nombre por renglón</div>
+        <button class="btn" style="align-self: flex-end">Aceptar</button>
+      </div>
+    </aside>
+
+    <main class="canvas" style="flex: 1; position: relative; overflow: auto; background-color: #f4f6fa; background-image: radial-gradient(#d5dbe5 1px, transparent 1px); background-size: 24px 24px; background-position: 12px 12px">
+      <div style="position: absolute; left: 0; top: 0; width: 1600px; height: 1200px">
+
+        <div class="table" style="left: 50px; top: 50px; width: 120px; height: 120px">
+          <div class="disc full" style="width: 64px; height: 64px"><span class="tname">Mesa 1</span><span class="tocc">8/8</span></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">AR</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">JR</div>
+          <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">ML</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)">PR</div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">CL</div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">EM</div>
+          <div class="seat on" style="left: calc(50% - 46px); top: calc(50% + 0px)">DR</div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">LR</div>
+        </div>
+
+        <div class="table" style="left: 340px; top: 50px; width: 120px; height: 120px">
+          <div class="disc partial" style="width: 64px; height: 64px"><span class="tname">Mesa 2</span><span class="tocc">6/8</span></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">GS</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">MS</div>
+          <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">FB</div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">RB</div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">IN</div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">CN</div>
+        </div>
+
+        <div class="table" style="left: 630px; top: 50px; width: 120px; height: 120px">
+          <div class="disc partial" style="width: 64px; height: 64px"><span class="tname">Amigas</span><span class="tocc">5/8</span></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">MC</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">VP</div>
+          <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">LG</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)">AB</div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 46px)"></div>
+          <div class="seat target" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">SM</div>
+        </div>
+
+        <div class="table" style="left: 920px; top: 50px; width: 120px; height: 120px">
+          <div class="disc partial" style="width: 64px; height: 64px"><span class="tname">Mesa 4</span><span class="tocc">4/8</span></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">HQ</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">NQ</div>
+          <div class="seat" style="left: calc(50% + 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">OV</div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">TV</div>
+        </div>
+
+        <div class="table" style="left: 1210px; top: 50px; width: 120px; height: 120px">
+          <div class="disc" style="width: 64px; height: 64px"><span class="tname">Mesa 5</span><span class="tocc">0/8</span></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% - 46px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 46px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)"></div>
+        </div>
+
+        <div class="table" style="left: 50px; top: 320px; width: 120px; height: 120px">
+          <div class="disc full" style="width: 64px; height: 64px"><span class="tname">Mesa 6</span><span class="tocc">8/8</span></div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% - 46px)">PC</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)">EC</div>
+          <div class="seat on" style="left: calc(50% + 46px); top: calc(50% + 0px)">MA</div>
+          <div class="seat on" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)">LA</div>
+          <div class="seat on" style="left: calc(50% + 0px); top: calc(50% + 46px)">RD</div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)">SD</div>
+          <div class="seat on" style="left: calc(50% - 46px); top: calc(50% + 0px)">GT</div>
+          <div class="seat on" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)">BT</div>
+        </div>
+
+        <div class="table" style="left: 340px; top: 320px; width: 120px; height: 120px">
+          <div class="disc" style="width: 64px; height: 64px"><span class="tname">Mesa 7</span><span class="tocc">0/8</span></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% - 46px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 46px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)"></div>
+        </div>
+
+        <div class="table" style="left: 630px; top: 320px; width: 120px; height: 120px">
+          <div class="disc" style="width: 64px; height: 64px"><span class="tname">Mesa 8</span><span class="tocc">0/8</span></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% - 46px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% - 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% + 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% + 0px); top: calc(50% + 46px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% + 32.5px)"></div>
+          <div class="seat" style="left: calc(50% - 46px); top: calc(50% + 0px)"></div>
+          <div class="seat" style="left: calc(50% - 32.5px); top: calc(50% - 32.5px)"></div>
+        </div>
+
+        <div class="chip" style="position: absolute; left: 596px; top: 168px; box-shadow: 0 1px 2px rgba(20,28,45,.06), 0 12px 28px -10px rgba(20,28,45,.35); border-color: #4f46e5; transform: rotate(-2deg)"><svg class="grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01"></path></svg><span class="av" style="background: #eef0ff; color: #4f46e5">LF</span>Lucía Fernández</div>
+
+        <div style="position: absolute; left: 50px; top: 500px; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border: 1px dashed #cfd5df; border-radius: 8px; color: #4b5566; font-weight: 600; background: rgba(255,255,255,.7)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>Agregar mesa
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
