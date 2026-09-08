@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* Design tokens — source of truth: DESIGN.md ("Tokens").
+   Tailwind v4 exposes each `--color-*` entry as utilities: bg-ground, text-ink-3,
+   border-line, ring-accent, ... Do not hardcode hex values in components.
+   `static` keeps every token in the output even when no utility references it,
+   so `var(--color-*)` is safe in inline styles and component CSS. */
+@theme static {
+  --color-ground: #f4f6fa;
+  --color-panel: #ffffff;
+
+  --color-ink: #1c2230;
+  --color-ink-2: #4b5566;
+  --color-ink-3: #7a8497;
+
+  --color-line: #e3e7ee;
+  --color-line-2: #cfd5df;
+
+  --color-accent: #4f46e5;
+  --color-accent-soft: #eef0ff;
+
+  --color-empty: #94a3b8;
+  --color-empty-soft: #f1f4f8;
+  --color-partial: #f59e0b;
+  --color-partial-soft: #fff4e0;
+  --color-full: #10b981;
+  --color-full-soft: #e6f8f1;
+
+  --color-danger: #dc2626;
+  --color-danger-soft: #fdecec;
+
+  --color-seat-on: #dfe4ee;
+  --color-seat-on-border: #c7ceda;
+
+  --font-sans: Manrope, "Segoe UI", system-ui, sans-serif;
+}
+
+/* Editor base: dense tool UI at 13px (DESIGN.md "Type"). */
+body {
+  @apply bg-ground text-ink font-sans antialiased;
+  font-size: 13px;
+}
+
+::selection {
+  background-color: var(--color-accent-soft);
+  color: var(--color-ink);
+}
+
+/* Thin themed scrollbar for the 1600x1200 canvas viewport (WebKit/Blink only;
+   other engines fall back to the platform scrollbar, which is acceptable). */
+.canvas-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.canvas-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.canvas-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-line-2);
+  border-radius: 10px;
+}
+
+.canvas-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}

@@ -1,4 +1,27 @@
+
+!.vscode/extensions.json
+# Editor directories and files
+# Logs
+*.local
+*.log
+*.njsproj
+*.ntvs*
+*.sln
+*.suo
+*.sw?
 .atl/
-node_modules/
-dist/
+.DS_Store
+.idea
 .vercel/
+.vscode/*
+dist
+dist/
+dist-ssr
+lerna-debug.log*
+logs
+node_modules
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
