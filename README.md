@@ -27,8 +27,11 @@ Este README es tu punto de entrada. Si el usuario te dice "leé el README y deci
 | 7 | `openspec/changes/mimesa-mvp/apply-progress.md` | Qué se hizo ya y en qué se desvió del diseño. Donde `design.md` y esto se contradigan, gana esto y el código en `src/`. |
 | 8 | `DESIGN.md` | Tokens, tipografía, tamaños, componentes y estados. Todo lo visual sale de acá. |
 | 9 | `docs/design/<Pantalla>.dc.html` | El mockup de la pantalla que vas a construir (la guía del track dice cuál). Copiá su estructura y estilo. |
+| 10 | `PRODUCT.md` | Contexto de producto: quiénes lo usan, para qué, principios. Sirve para decidir bien cuando ningún documento cierra un detalle. |
+| 11 | `openspec/changes/mimesa-mvp/proposal.md` | La propuesta: intención, alcance, enfoque técnico, flujo de trabajo del equipo y riesgos. El porqué de todo. |
+| 12 | `openspec/changes/mimesa-mvp/exploration.md` | La exploración técnica: riesgos verificados del stack (dnd-kit, lz-string, QR, html-to-image), decisiones y supuestos. Contexto de fondo. |
 
-`PRODUCT.md` tiene el contexto de producto (usuarios, propósito, principios). Leelo si tenés que tomar una decisión de comportamiento que ningún documento cierra.
+Los archivos 1 a 9 son los que necesitás para trabajar. Los 10 a 12 te dan todo el contexto: leelos igual, así entendés las decisiones y no las rediscutís.
 
 ### 2. Determiná el track
 

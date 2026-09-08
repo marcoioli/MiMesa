@@ -12,7 +12,7 @@ You are working inside a small, time-boxed student project. Three people build t
 
 ## 1. How to answer "leé el README y decime qué hacer"
 
-1. Read, in order: `README.md`, this file, `openspec/changes/mimesa-mvp/tasks.md`, the track guide (`docs/tracks/track-a.md` or `track-c.md`), `docs/requirements.md`, the spec files under `openspec/changes/mimesa-mvp/specs/` for the requirement ids of the next task, `openspec/changes/mimesa-mvp/design.md`, `openspec/changes/mimesa-mvp/apply-progress.md`, `DESIGN.md`, and the mockup(s) the track guide names under `docs/design/`.
+1. Read, in order: `README.md`, this file, `openspec/changes/mimesa-mvp/tasks.md`, the track guide (`docs/tracks/track-a.md` or `track-c.md`), `docs/requirements.md`, the spec files under `openspec/changes/mimesa-mvp/specs/` for the requirement ids of the next task, `openspec/changes/mimesa-mvp/design.md`, `openspec/changes/mimesa-mvp/apply-progress.md`, `DESIGN.md`, the mockup(s) the track guide names under `docs/design/`, and then, for full context, `PRODUCT.md`, `openspec/changes/mimesa-mvp/proposal.md` and `openspec/changes/mimesa-mvp/exploration.md`. Read all of them before proposing the first task; the decisions they record are settled and are not to be reopened.
 2. Determine the track: the user tells you, or the branch name does (`feat/track-a-event-guests` = A, `feat/track-c-share-guestview-export` = C). If neither, ask, then stop.
 3. Find the first unchecked `- [ ]` task of that track in `tasks.md`.
 4. Tell the user, in their language, in a few sentences: the task id, the requirement ids, the files you will create or edit, the store actions and base contracts you will use, and the exact "Done when" check. Then STOP and wait for their OK. Do not write code before it.
