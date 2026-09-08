@@ -27,8 +27,8 @@ Declare these in `src/index.css` under `@theme` so Tailwind v4 exposes them as u
 | `--color-ink-3` | `#7a8497` | Placeholders, captions, counters' labels |
 | `--color-line` | `#e3e7ee` | Hairlines between regions, card borders |
 | `--color-line-2` | `#cfd5df` | Control borders (inputs, secondary buttons), empty-seat dashes |
-| `--color-accent` | `#4f46e5` | Primary button, drop target ring, selected seat, own seat in guest view, links |
-| `--color-accent-soft` | `#eef0ff` | Selected template, hover row, focus halo, drop target fill |
+| `--color-accent` | `#7c3aed` (the logo violet) | Primary button, drop target ring, selected seat, own seat in guest view, links |
+| `--color-accent-soft` | `#f1e9ff` | Selected template, hover row, focus halo, drop target fill |
 | `--color-empty` | `#94a3b8` | Empty table ring |
 | `--color-empty-soft` | `#f1f4f8` | Empty table disc, avatar background |
 | `--color-partial` | `#f59e0b` | Partially filled table ring |
@@ -37,6 +37,8 @@ Declare these in `src/index.css` under `@theme` so Tailwind v4 exposes them as u
 | `--color-full-soft` | `#e6f8f1` | Full table disc |
 | `--color-danger` | `#dc2626` | Destructive menu items, rejected drop ring |
 | `--color-seat-on` | `#dfe4ee` | Occupied seat fill (border `#c7ceda`) |
+
+The mockups in `docs/design/` were drawn with the earlier indigo accent (`#4f46e5`); the violet above is the current value. Always use the token, never the hex from a mockup.
 
 Canvas dot grid: `radial-gradient(#d5dbe5 1px, transparent 1px)`, `24px` cell, offset `12px`.
 
