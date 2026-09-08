@@ -1,15 +1,22 @@
-import { CANVAS_H, CANVAS_NODE_ID, CANVAS_W } from '../../lib/constants';
-import { seatNamesOf } from '../../store/selectors';
+import { useState } from 'react';
+
+import { CANVAS_H, CANVAS_NODE_ID, CANVAS_W, GRID_MARGIN } from '../../lib/constants';
 import type { Table } from '../../store/types';
 import { useEventStore } from '../../store/useEventStore';
 
-import TableView from './TableView';
+import AddTableDialog from './AddTableDialog';
+import TableNode from './TableNode';
 
-/** Placeholder owned by track B: read-only tables, no drag targets yet. */
+/** Stable empty reference: a fresh array in the selector would re-render forever. */
+const NO_TABLES: Table[] = [];
+
+/**
+ * The plan (RF-05, RF-09): a scrolling viewport over a fixed 1600x1200 canvas
+ * holding one `TableNode` per table on the 5x4 grid.
+ */
 export default function CanvasArea() {
-  const event = useEventStore((s) => s.event);
-  const tables = event?.tables ?? [];
-  const namesOf = (table: Table) => (event ? seatNamesOf(event, table) : []);
+  const tables = useEventStore((state) => state.event?.tables ?? NO_TABLES);
+  const [addOpen, setAddOpen] = useState(false);
 
   return (
     <main className="canvas-scroll relative min-w-0 flex-1 overflow-auto bg-ground">
@@ -27,11 +34,33 @@ export default function CanvasArea() {
         }}
       >
         {tables.map((table) => (
-          <div key={table.id} className="absolute" style={{ left: table.x, top: table.y }}>
-            <TableView name={table.name} capacity={table.capacity} seatNames={namesOf(table)} />
-          </div>
+          <TableNode key={table.id} table={table} />
         ))}
+
+        <button
+          type="button"
+          data-export-ignore="true"
+          onClick={() => setAddOpen(true)}
+          className="absolute flex h-[34px] items-center gap-2 rounded-lg border border-dashed border-line-2 bg-panel/70 px-3 font-semibold text-ink-2 transition-colors duration-150 hover:border-accent hover:text-accent"
+          style={{ left: GRID_MARGIN, bottom: GRID_MARGIN }}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+          >
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
+          Agregar mesa
+        </button>
       </div>
+
+      <AddTableDialog open={addOpen} onClose={() => setAddOpen(false)} />
     </main>
   );
 }
