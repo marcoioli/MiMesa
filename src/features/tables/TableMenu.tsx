@@ -1,7 +1,13 @@
 import { useState } from 'react';
 
 import ConfirmDialog from '../../app/ConfirmDialog';
-import { MAX_CAPACITY, MIN_CAPACITY } from '../../lib/constants';
+import {
+  MAX_CAPACITY,
+  MAX_TABLE_SCALE,
+  MIN_CAPACITY,
+  MIN_TABLE_SCALE,
+  TABLE_SCALE_STEP,
+} from '../../lib/constants';
 import { useEventStore } from '../../store/useEventStore';
 
 import Popover from './Popover';
@@ -26,6 +32,7 @@ const STEP_CLASS =
 export default function TableMenu({ tableId, anchor, onClose }: TableMenuProps) {
   const event = useEventStore((state) => state.event);
   const setTableCapacity = useEventStore((state) => state.setTableCapacity);
+  const setTableScale = useEventStore((state) => state.setTableScale);
   const clearTable = useEventStore((state) => state.clearTable);
   const removeTable = useEventStore((state) => state.removeTable);
 
@@ -34,6 +41,8 @@ export default function TableMenu({ tableId, anchor, onClose }: TableMenuProps) 
   const table = event?.tables.find((candidate) => candidate.id === tableId);
   // The table may have been deleted while the menu was open.
   if (!table) return null;
+
+  const scale = table.scale ?? 1;
 
   // Unmounting the popover while the dialog is open keeps its outside-pointerdown
   // listener from closing both before "Confirmar" is clicked.
@@ -99,6 +108,54 @@ export default function TableMenu({ tableId, anchor, onClose }: TableMenuProps) 
             aria-label="+"
             disabled={table.capacity >= MAX_CAPACITY}
             onClick={() => setTableCapacity(tableId, table.capacity + 1)}
+            className={STEP_CLASS}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+        </span>
+      </div>
+
+      {/* RF-37: visual size only, same steps as the floating toolbar on the canvas. */}
+      <div className={`${ITEM_CLASS} justify-between text-ink`}>
+        <span className="flex items-center gap-2">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="shrink-0"
+          >
+            <path d="M4 9V4h5" />
+            <path d="M20 15v5h-5" />
+            <path d="M4 4l6 6" />
+            <path d="M20 20l-6-6" />
+          </svg>
+          Tamaño
+        </span>
+        <span className="flex items-center gap-1.5 tabular-nums">
+          <button
+            type="button"
+            aria-label="-"
+            disabled={scale <= MIN_TABLE_SCALE}
+            onClick={() => setTableScale(tableId, scale - TABLE_SCALE_STEP)}
+            className={STEP_CLASS}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+          {scale}x
+          <button
+            type="button"
+            aria-label="+"
+            disabled={scale >= MAX_TABLE_SCALE}
+            onClick={() => setTableScale(tableId, scale + TABLE_SCALE_STEP)}
             className={STEP_CLASS}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

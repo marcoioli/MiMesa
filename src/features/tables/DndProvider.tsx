@@ -14,7 +14,7 @@ import type {
   DragStartEvent,
 } from '@dnd-kit/core';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { ReactNode, RefObject } from 'react';
 
 import { useToastStore } from '../../app/useToastStore';
 import type { DragData, DropData } from '../../lib/dnd';
@@ -38,11 +38,20 @@ export type DndFeedback = {
   rejectedSeatIndex: (tableId: string) => number | undefined;
   /** Whether this table's disc must draw the full-table red ring (RF-22). */
   isTableRejected: (tableId: string) => boolean;
+  /**
+   * Current canvas zoom (RF-36). A ref, not state: `DndProvider` sits above
+   * `CanvasArea` in the tree, and a zoom change must not re-render every table.
+   */
+  zoom: RefObject<number>;
+  /** `CanvasArea` publishes its zoom here; pointer deltas are divided by it. */
+  setCanvasZoom: (zoom: number) => void;
 };
 
 const NO_FEEDBACK: DndFeedback = {
   rejectedSeatIndex: () => undefined,
   isTableRejected: () => false,
+  zoom: { current: 1 },
+  setCanvasZoom: () => undefined,
 };
 
 const DndFeedbackContext = createContext<DndFeedback>(NO_FEEDBACK);
@@ -106,6 +115,11 @@ export default function DndProvider({ children }: { children: ReactNode }) {
   const [dragName, setDragName] = useState<string | null>(null);
   const [rejection, setRejection] = useState<Rejection>(null);
   const flashTimer = useRef<number | null>(null);
+  const zoom = useRef(1);
+
+  const setCanvasZoom = useCallback((value: number) => {
+    zoom.current = value > 0 ? value : 1;
+  }, []);
 
   // 5px of movement before a drag starts, so RF-24 (click a seated guest) and
   // RF-08 (double-click the table name) coexist with RF-23 and RF-11.
@@ -156,8 +170,9 @@ export default function DndProvider({ children }: { children: ReactNode }) {
 
     if (data.type === 'table') {
       setRejection(null);
-      // RF-11: `moveTable` owns the clamp into the 1600x1200 canvas.
-      moveTable(data.tableId, data.x + delta.x, data.y + delta.y);
+      // RF-11 + RF-36: `delta` is on-screen pixels, so it is divided by the zoom
+      // to get canvas pixels. `moveTable` owns the clamp into the 1600x1200 canvas.
+      moveTable(data.tableId, data.x + delta.x / zoom.current, data.y + delta.y / zoom.current);
       return;
     }
 
@@ -202,8 +217,10 @@ export default function DndProvider({ children }: { children: ReactNode }) {
           ? rejection.seatIndex
           : undefined,
       isTableRejected: (tableId) => rejection?.kind === 'table' && rejection.tableId === tableId,
+      zoom,
+      setCanvasZoom,
     }),
-    [rejection],
+    [rejection, setCanvasZoom],
   );
 
   return (
