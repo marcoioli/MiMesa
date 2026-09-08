@@ -10,6 +10,8 @@ export type Table = {
   /** Top-left corner of the table box on the 1600x1200 canvas. */
   x: number;
   y: number;
+  /** Visual size factor (RF-37), 0.75..2. Missing means 1. Does not affect capacity. */
+  scale?: number;
   /** seats[i] = guest id or null. Always has length === capacity. */
   seats: (string | null)[];
 };

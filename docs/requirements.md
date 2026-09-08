@@ -61,7 +61,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 |---|---|---|---|
 | RF-04 | Al crear el evento se elige una plantilla de mesas: "6 mesas de 8", "10 mesas de 10", "8 mesas de 6" o "Personalizado" (cantidad de mesas y capacidad, ambas numéricas). | M | S |
 | RF-05 | Las mesas se numeran automáticamente "Mesa 1", "Mesa 2", etc., y se ubican en grilla en el plano. | M | S |
-| RF-06 | Agregar una mesa nueva indicando capacidad. Eliminar una mesa: sus invitados vuelven al panel lateral. | M | S |
+| RF-06 | Agregar una mesa nueva indicando capacidad, desde un botón "Agregar mesa" siempre visible abajo a la derecha del plano. Eliminar una mesa: sus invitados vuelven al panel lateral. | M | S |
 | RF-07 | Cambiar la capacidad de una mesa. Si se reduce y hay invitados en las sillas que desaparecen, vuelven al panel lateral. | S | S |
 | RF-08 | Renombrar una mesa con doble click sobre su nombre. | S | S |
 | RF-09 | Cada mesa se dibuja como un círculo con las sillas distribuidas alrededor, el nombre en el centro y la ocupación "5/8". | M | M |
@@ -69,6 +69,8 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 | RF-11 | Mover una mesa arrastrándola por el plano. La posición se guarda. | S | M |
 | RF-12 | Vaciar una mesa desde su menú: todos sus invitados vuelven al panel lateral. | S | S |
 | RF-13 | "Vaciar todas las mesas" desde la barra superior, previa confirmación. | S | S |
+| RF-36 | Zoom del plano entre 50 % y 200 % con botones "−", "100 %", "+" abajo a la derecha y con Ctrl + rueda. Es estado de interfaz: no se guarda con el evento y no afecta el PNG. | S | S |
+| RF-37 | Click sobre el disco de una mesa la selecciona (borde índigo). La mesa seleccionada tiene un control "Tamaño" −/+ (0,75x a 2x, pasos de 0,25) que agranda o achica el dibujo completo, sillas incluidas, sin cambiar la capacidad. El tamaño se guarda con el evento. Escape o click en el fondo deselecciona. | S | M |
 
 ### 4.3 Invitados
 
@@ -241,7 +243,7 @@ La base común se hace primero y en conjunto: scaffold, store con el contrato de
 | Persona | Módulos | Requerimientos |
 |---|---|---|
 | A | Evento e invitados | RF-01 a RF-05, RF-13 a RF-19, RF-26 |
-| B | Plano, mesas y drag and drop | RF-06 a RF-12, RF-20 a RF-25 |
+| B | Plano, mesas y drag and drop | RF-06 a RF-12, RF-20 a RF-25, RF-36, RF-37 |
 | C | Compartir, vista del invitado y exportación | RF-27 a RF-35 |
 
 El detalle de tareas, orden y dependencias se define en el SDD.

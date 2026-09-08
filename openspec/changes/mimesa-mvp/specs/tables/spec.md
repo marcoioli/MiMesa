@@ -180,3 +180,43 @@ be deleted by this action.
 - GIVEN the empty-all confirmation dialog is open
 - WHEN the organizer cancels
 - THEN all seat assignments remain exactly as before
+
+### Requirement: Canvas zoom (RF-36)
+
+The canvas MUST offer zoom between 50% and 200% through "-", "100 %" and "+" controls at the
+bottom-right corner of the canvas area and through Ctrl + mouse wheel. Zoom is UI state: it
+MUST NOT be persisted with the event and MUST NOT change the PNG export. Dragging a table
+while zoomed MUST move it by the on-canvas distance, not the on-screen distance.
+
+#### Scenario: Zoom in with the button
+
+- GIVEN the canvas at 100%
+- WHEN the organizer presses "+" twice
+- THEN the label reads 120% and every table is drawn larger, and the canvas scrolls further
+- AND the canvas size in the exported PNG is unchanged
+
+#### Scenario: Table move under zoom
+
+- GIVEN the canvas at 200%
+- WHEN the organizer drags a table label 200px to the right on screen
+- THEN the table moves 100px on the canvas and stays where it was released
+
+### Requirement: Table selection and visual size (RF-37)
+
+Clicking the disc of a table MUST select it, shown with an accent outline. The selected
+table MUST offer a "Tamaño" control with "-" and "+" steps of 0.25 between 0.75x and 2x that
+scales the whole drawing, seats included, without changing the capacity or the seating. The
+size MUST persist with the event. Escape or a click on the canvas background MUST deselect.
+
+#### Scenario: Enlarge a table
+
+- GIVEN "Mesa 3" with 5 of 8 seats occupied at size 1x
+- WHEN the organizer selects it and presses "+" twice on "Tamaño"
+- THEN "Mesa 3" is drawn at 1.5x with the same 5 guests in the same seats and still reads 5/8
+- AND after a reload it is still drawn at 1.5x
+
+#### Scenario: Size bounds
+
+- GIVEN a table at 2x
+- WHEN the organizer presses "+"
+- THEN the size stays at 2x and the "+" control is disabled
