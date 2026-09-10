@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import ConfirmDialog from '../../app/ConfirmDialog';
 import { useToastStore } from '../../app/useToastStore';
@@ -55,73 +56,104 @@ export default function Topbar() {
   };
 
   return (
-    <header className="flex flex-none flex-col border-b border-line bg-panel md:h-14 md:flex-row md:items-center md:gap-4 md:pl-5 md:pr-4">
-      {/* RF-42: two rows on a phone, one on desktop. `md:contents` dissolves both
-          wrappers above `md`, so the desktop bar keeps exactly the layout it had. */}
-      <div className="flex min-w-0 items-center gap-3 px-4 pb-1 pt-2.5 md:contents">
-        <div className="flex items-center gap-2 flex-none">
-          <img src="/logo-mark.png" alt="" width="28" height="28" className="h-7 w-7" />
-          <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink">MiMesa</span>
-        </div>
+    <header className="flex flex-none flex-col border-b border-line bg-panel md:h-14 md:flex-row md:items-center md:justify-between md:gap-3 md:px-4">
+      {/* Left: Logo (link to home), event title edit button, and auto-saved indicator */}
+      <div className="flex min-w-0 items-center gap-2.5 px-4 pb-1 pt-2 md:contents">
+        <Link
+          to="/"
+          title="Ir al inicio"
+          className="group flex flex-none items-center gap-2 rounded-lg p-1 transition hover:bg-ground cursor-pointer"
+        >
+          <img
+            src="/logo-mark.png"
+            alt="MiMesa"
+            width="28"
+            height="28"
+            className="h-7 w-7 transition-transform group-hover:scale-105"
+          />
+          <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink group-hover:text-accent transition-colors">
+            MiMesa
+          </span>
+        </Link>
 
         <div className="hidden h-6 w-px flex-none bg-line md:block" />
 
-        <button
-          type="button"
-          onClick={() => setIsEditDialogOpen(true)}
-          className="group flex min-w-0 items-center gap-2 rounded-lg p-1 text-left transition hover:bg-ground"
-          title="Editar evento"
-          aria-label="Editar evento"
-        >
-          <span className="truncate text-[14px] font-bold text-ink">{event?.name ?? ''}</span>
-          {metaText && <span className="truncate whitespace-nowrap text-[12px] font-medium text-ink-3">{metaText}</span>}
-          <svg
-            className="h-3.5 w-3.5 flex-none stroke-ink-3 transition group-hover:stroke-ink stroke-[1.75]"
-            viewBox="0 0 24 24"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
+        <div className="flex min-w-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsEditDialogOpen(true)}
+            className="group flex min-w-0 max-w-[180px] lg:max-w-[280px] items-center gap-1.5 rounded-lg p-1 text-left transition hover:bg-ground cursor-pointer"
+            title="Editar evento"
+            aria-label="Editar evento"
           >
-            <path d="M12 20h9" />
-            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-          </svg>
-        </button>
+            <span className="truncate text-[14px] font-bold text-ink">{event?.name ?? ''}</span>
+            {metaText && (
+              <span className="hidden 2xl:inline truncate whitespace-nowrap text-[12px] font-medium text-ink-3">
+                {metaText}
+              </span>
+            )}
+            <svg
+              className="h-3.5 w-3.5 flex-none stroke-ink-3 transition group-hover:stroke-ink stroke-[1.75]"
+              viewBox="0 0 24 24"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+            </svg>
+          </button>
 
+          <span
+            className="hidden xl:inline-flex items-center gap-1 text-[11px] font-medium text-ink-3 select-none"
+            title="Los cambios se guardan automáticamente en tu navegador"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Guardado
+          </span>
+        </div>
       </div>
 
-      {/* Counters and actions. On a phone they share one strip that scrolls
-          sideways instead of wrapping into several tall rows. */}
-      <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap px-4 pb-2.5 md:contents">
-        <div className="flex flex-none items-center gap-4 md:ml-auto">
-          <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
-            <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.total}</b>
+      {/* Right: Counters and actions */}
+      <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap px-4 pb-2 md:contents">
+        <div className="flex flex-none items-center gap-3 lg:gap-4 md:ml-auto">
+          <div className="flex items-baseline gap-1 text-[11px] lg:text-[12px] font-bold text-ink-3">
+            <b className="text-[14px] lg:text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">
+              {stats.total}
+            </b>
             <span>Invitados</span>
           </div>
-          <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
-            <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.seated}</b>
+          <div className="flex items-baseline gap-1 text-[11px] lg:text-[12px] font-bold text-ink-3">
+            <b className="text-[14px] lg:text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">
+              {stats.seated}
+            </b>
             <span>Sentados</span>
           </div>
-          <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
-            <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.unseated}</b>
+          <div className="flex items-baseline gap-1 text-[11px] lg:text-[12px] font-bold text-ink-3">
+            <b className="text-[14px] lg:text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">
+              {stats.unseated}
+            </b>
             <span>Sin ubicar</span>
           </div>
-          <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
-            <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.freeSeats}</b>
+          <div className="flex items-baseline gap-1 text-[11px] lg:text-[12px] font-bold text-ink-3">
+            <b className="text-[14px] lg:text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">
+              {stats.freeSeats}
+            </b>
             <span>Sillas libres</span>
           </div>
         </div>
 
         <div className="hidden h-6 w-px flex-none bg-line md:block" />
 
-        <div className="flex flex-none items-center gap-2">
+        <div className="flex flex-none items-center gap-1.5 lg:gap-2">
           <button
             type="button"
             onClick={handleAutoSeat}
-            className="inline-flex h-[34px] items-center gap-1.5 rounded-lg border border-line-2 bg-panel px-3 text-[13px] font-semibold text-ink transition hover:border-ink-3 active:bg-ground"
+            className="inline-flex h-[32px] lg:h-[34px] items-center gap-1.5 rounded-lg border border-line-2 bg-panel px-2.5 lg:px-3 text-[12px] lg:text-[13px] font-semibold text-ink transition hover:border-ink-3 active:bg-ground cursor-pointer"
           >
             <svg
-              className="h-4 w-4 stroke-current stroke-[1.75]"
+              className="h-3.5 w-3.5 lg:h-4 lg:w-4 stroke-current stroke-[1.75]"
               viewBox="0 0 24 24"
               fill="none"
               strokeLinecap="round"
@@ -139,7 +171,7 @@ export default function Topbar() {
           <button
             type="button"
             onClick={() => setIsClearAllDialogOpen(true)}
-            className="inline-flex h-[34px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold text-ink-2 transition hover:bg-ground hover:text-ink active:bg-ground"
+            className="inline-flex h-[32px] lg:h-[34px] items-center gap-1.5 rounded-lg px-2 lg:px-2.5 text-[12px] lg:text-[13px] font-semibold text-ink-2 transition hover:bg-ground hover:text-ink active:bg-ground cursor-pointer"
           >
             Vaciar todas las mesas
           </button>
@@ -148,10 +180,10 @@ export default function Topbar() {
           <button
             type="button"
             onClick={() => setIsResetDialogOpen(true)}
-            className="inline-flex h-[34px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold text-ink-2 transition hover:bg-ground hover:text-ink active:bg-ground"
+            className="inline-flex h-[32px] lg:h-[34px] items-center gap-1.5 rounded-lg px-2 lg:px-2.5 text-[12px] lg:text-[13px] font-semibold text-ink-2 transition hover:bg-ground hover:text-ink active:bg-ground cursor-pointer"
           >
             <svg
-              className="h-4 w-4 stroke-current stroke-[1.75]"
+              className="h-3.5 w-3.5 lg:h-4 lg:w-4 stroke-current stroke-[1.75]"
               viewBox="0 0 24 24"
               fill="none"
               strokeLinecap="round"
