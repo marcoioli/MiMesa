@@ -90,6 +90,32 @@ ignoring letter case and diacritics. An empty search field MUST show the whole u
 - WHEN the organizer clears the search field
 - THEN the sidebar lists every unseated guest again
 
+### Requirement: Find a seated guest and point the plan at them (RF-40)
+
+The RF-18 search MUST also match guests who already hold a seat, who are absent from the
+sidebar list by definition. Those matches MUST appear in their own "Ya sentados" block, each
+naming the table its guest sits at. Choosing one MUST bring that table into the middle of the
+canvas viewport and mark that guest's seat for a few seconds, after which the mark clears on
+its own. The mark MUST NOT reach the PNG export.
+
+#### Scenario: A seated guest is found and pointed at
+
+- GIVEN "Ana" occupies a seat of "Mesa 7", which is scrolled out of view
+- WHEN the organizer types "ana" and chooses her entry under "Ya sentados"
+- THEN the canvas scrolls to centre "Mesa 7" and Ana's seat is marked
+
+#### Scenario: Seated and unseated matches are told apart
+
+- GIVEN "Ana Rossi" is seated and "Ana Gómez" is unseated
+- WHEN the organizer types "ana"
+- THEN "Ana Gómez" appears as a draggable sidebar card and "Ana Rossi" appears under "Ya sentados" with her table name
+
+#### Scenario: The mark clears itself
+
+- GIVEN a seat marked by a search
+- WHEN a few seconds pass with no further action
+- THEN the mark is gone and the plan is otherwise unchanged
+
 ### Requirement: Topbar counters (RF-19)
 
 The topbar MUST display four counters: total guests, seated guests, unseated guests, and

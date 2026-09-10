@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 
+import { useSpotlightStore } from '../../app/useSpotlightStore';
 import {
   CANVAS_H,
   CANVAS_NODE_ID,
@@ -9,6 +10,7 @@ import {
   MIN_ZOOM,
   ZOOM_STEP,
 } from '../../lib/constants';
+import { tableBox } from '../../lib/geometry';
 import type { Table } from '../../store/types';
 import { useEventStore } from '../../store/useEventStore';
 
@@ -23,6 +25,9 @@ const NO_TABLES: Table[] = [];
 function clampZoom(value: number): number {
   return Math.round(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value)) * 100) / 100;
 }
+
+/** How long the spotlighted seat keeps its mark before the canvas forgets it (RF-40). */
+const SPOTLIGHT_MS = 2600;
 
 const OVERLAY_GROUP =
   'flex h-[34px] items-center rounded-lg border border-line-2 bg-panel shadow-[0_2px_8px_rgba(28,34,48,.10)]';
@@ -43,6 +48,9 @@ const ZOOM_STEP_BTN =
 export default function CanvasArea() {
   const tables = useEventStore((state) => state.event?.tables ?? NO_TABLES);
   const { setCanvasZoom } = useDndFeedback();
+  const spotlightGuestId = useSpotlightStore((state) => state.guestId);
+  const spotlightNonce = useSpotlightStore((state) => state.nonce);
+  const clearSpotlight = useSpotlightStore((state) => state.clear);
 
   const [addOpen, setAddOpen] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -103,6 +111,29 @@ export default function CanvasArea() {
     node.addEventListener('wheel', handleWheel, { passive: false });
     return () => node.removeEventListener('wheel', handleWheel);
   }, []);
+
+  // RF-40: the sidebar asks for a seated guest, the canvas brings their table to the
+  // middle of the viewport. Keyed on `nonce`, not on `guestId`, so choosing the same
+  // guest again flies there again. Runs after layout so `clientWidth` is the real one.
+  useEffect(() => {
+    if (spotlightGuestId === null) return;
+    const node = scrollerRef.current;
+    const target = tables.find((table) => table.seats.includes(spotlightGuestId));
+    if (!node || !target) {
+      clearSpotlight();
+      return;
+    }
+    const half = (tableBox(target.capacity) * (target.scale ?? 1)) / 2;
+    node.scrollTo({
+      left: (target.x + half) * zoomRef.current - node.clientWidth / 2,
+      top: (target.y + half) * zoomRef.current - node.clientHeight / 2,
+      behavior: 'smooth',
+    });
+    const timer = window.setTimeout(clearSpotlight, SPOTLIGHT_MS);
+    return () => window.clearTimeout(timer);
+    // `tables` is intentionally out of the deps: a seat change during the mark must
+    // not re-fly the canvas. `nonce` is the only thing that starts a flight.
+  }, [spotlightNonce, spotlightGuestId, clearSpotlight]);
 
   // RF-37: Escape deselects. Bound only while something is selected.
   useEffect(() => {
