@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { MouseEvent, PointerEvent, ReactNode } from 'react';
 
 import GuestDraggable from '../../app/dnd/GuestDraggable';
+import { useSpotlightStore } from '../../app/useSpotlightStore';
 import { MAX_TABLE_SCALE, MIN_TABLE_SCALE, TABLE_SCALE_STEP } from '../../lib/constants';
 import type { SeatDropData, TableDragData, TableDropData } from '../../lib/dnd';
 import { seatDropId, tableDragId, tableDropId } from '../../lib/dnd';
@@ -39,6 +40,7 @@ function SeatDroppable({
   seatIndex,
   occupied,
   swapping,
+  spotlit,
   children,
 }: {
   tableId: string;
@@ -46,6 +48,8 @@ function SeatDroppable({
   occupied: boolean;
   /** RF-39: this seat is one of the two about to trade occupants. */
   swapping: boolean;
+  /** RF-40: the search pointed at this seat and it must stand out for a moment. */
+  spotlit: boolean;
   children: ReactNode;
 }) {
   const { isOver, setNodeRef } = useDroppable({
@@ -57,16 +61,26 @@ function SeatDroppable({
   // is the only one that also lights the origin seat, which the pointer is not over.
   const ring = swapping
     ? 'ring-2 ring-accent shadow-[0_0_0_5px_var(--color-accent-soft)]'
-    : isOver && !occupied
-      ? 'ring-2 ring-accent'
-      : '';
+    : spotlit
+      ? 'ring-2 ring-accent shadow-[0_0_0_6px_var(--color-accent-soft)]'
+      : isOver && !occupied
+        ? 'ring-2 ring-accent'
+        : '';
 
   // The wrapper MUST stay `w-full h-full`, or the drop rect stops matching the seat.
+  // `relative` only anchors the RF-40 halo and changes no layout.
   return (
     <div
       ref={setNodeRef}
-      className={`h-full w-full rounded-full transition-shadow duration-150 ${ring}`}
+      className={`relative h-full w-full rounded-full transition-shadow duration-150 ${ring}`}
     >
+      {/* The expanding halo is decoration: it must never reach the PNG (RF-35). */}
+      {spotlit ? (
+        <span
+          data-export-ignore="true"
+          className="pointer-events-none absolute inset-0 animate-ping rounded-full ring-2 ring-accent"
+        />
+      ) : null}
       {children}
     </div>
   );
@@ -141,6 +155,7 @@ export default function TableNode({ table, selected, onSelect }: TableNodeProps)
   const event = useEventStore((state) => state.event);
   const setTableScale = useEventStore((state) => state.setTableScale);
   const feedback = useDndFeedback();
+  const spotlightGuestId = useSpotlightStore((state) => state.guestId);
 
   const [menu, setMenu] = useState<MenuState>(null);
   const closeMenu = useCallback(() => setMenu(null), []);
@@ -184,6 +199,7 @@ export default function TableNode({ table, selected, onSelect }: TableNodeProps)
         seatIndex={seat.index}
         occupied={guestId !== null}
         swapping={feedback.isSwapSeat(table.id, seat.index)}
+        spotlit={guestId !== null && guestId === spotlightGuestId}
       >
         {guestId === null ? (
           seat.node

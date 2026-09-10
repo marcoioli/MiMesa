@@ -1,14 +1,40 @@
 import { useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 
+import { useSpotlightStore } from '../../app/useSpotlightStore';
 import type { DragData, SidebarDropData } from '../../lib/dnd';
 import { SIDEBAR_DROP_ID } from '../../lib/dnd';
 import { normalize } from '../../lib/text';
 import { unseatedGuests } from '../../store/selectors';
+import type { Event, Guest } from '../../store/types';
 import { useEventStore } from '../../store/useEventStore';
 import AddGuestInline from './AddGuestInline';
 import BulkAddGuests from './BulkAddGuests';
 import GuestCard from './GuestCard';
+
+/** A guest the search found on a seat rather than in the "Sin ubicar" list (RF-40). */
+type SeatedMatch = { guest: Guest; tableName: string };
+
+/**
+ * RF-40: the sidebar list only ever holds unseated guests, so once someone is seated
+ * the search stops finding them. This walks the tables instead, and is kept local
+ * rather than added to `src/store/selectors.ts`, whose exports are a frozen contract.
+ */
+function seatedMatchesOf(event: Event | null, normalizedQuery: string): SeatedMatch[] {
+  if (!event || !normalizedQuery) return [];
+  const byId = new Map(event.guests.map((guest) => [guest.id, guest]));
+  const found: SeatedMatch[] = [];
+  for (const table of event.tables) {
+    for (const seat of table.seats) {
+      if (seat === null) continue;
+      const guest = byId.get(seat);
+      if (guest && normalize(guest.name).includes(normalizedQuery)) {
+        found.push({ guest, tableName: table.name });
+      }
+    }
+  }
+  return found;
+}
 
 export default function GuestSidebar() {
   const event = useEventStore((s) => s.event);
@@ -26,10 +52,13 @@ export default function GuestSidebar() {
   const dragged = active?.data.current as DragData | undefined;
   const willUnseat = isOver && dragged?.type === 'guest' && dragged.from !== null;
 
+  const spotlight = useSpotlightStore((s) => s.spotlight);
+
   const normalizedQuery = normalize(searchQuery);
   const visibleGuests = normalizedQuery
     ? unseated.filter((guest) => normalize(guest.name).includes(normalizedQuery))
     : unseated;
+  const seatedMatches = seatedMatchesOf(event, normalizedQuery);
 
   return (
     <aside
@@ -87,6 +116,32 @@ export default function GuestSidebar() {
         {visibleGuests.map((guest) => (
           <GuestCard key={guest.id} guest={guest} />
         ))}
+
+        {seatedMatches.length > 0 ? (
+          <>
+            <div className="mt-2 flex items-baseline justify-between border-t border-line pt-3">
+              <span className="text-[12px] font-extrabold text-ink-2">Ya sentados</span>
+              <span className="text-[11px] font-bold text-ink-3 tabular-nums">
+                {seatedMatches.length}
+              </span>
+            </div>
+            {seatedMatches.map((match) => (
+              <button
+                key={match.guest.id}
+                type="button"
+                onClick={() => spotlight(match.guest.id)}
+                className="flex h-9 items-center justify-between gap-2 rounded-lg border border-line bg-panel px-2.5 text-left transition-colors duration-150 hover:border-accent"
+              >
+                <span className="truncate text-[13px] font-semibold text-ink">
+                  {match.guest.name}
+                </span>
+                <span className="shrink-0 text-[11px] font-bold text-ink-3">
+                  {match.tableName}
+                </span>
+              </button>
+            ))}
+          </>
+        ) : null}
       </div>
 
       <BulkAddGuests />
