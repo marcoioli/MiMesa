@@ -1,5 +1,6 @@
 import { unseatedGuests } from '../../store/selectors';
 import { useEventStore } from '../../store/useEventStore';
+import AddGuestInline from './AddGuestInline';
 import BulkAddGuests from './BulkAddGuests';
 import GuestCard from './GuestCard';
 
@@ -15,6 +16,10 @@ export default function GuestSidebar() {
         <span className="text-[12px] font-bold text-ink-3 tabular-nums">
           {unseated.length} de {totalGuests}
         </span>
+      </div>
+
+      <div className="px-4 pb-2.5">
+        <AddGuestInline />
       </div>
 
       <div className="relative flex flex-1 flex-col gap-1.5 overflow-y-auto px-4 py-1">
