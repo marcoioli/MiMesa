@@ -95,6 +95,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 | RF-24 | Click sobre un invitado sentado abre un menú con "Quitar de la mesa" (vuelve al panel lateral) y "Eliminar invitado". | M | S |
 | RF-38 | Arrastrar un invitado ya sentado y soltarlo sobre el panel lateral lo quita de la mesa y lo devuelve a "Sin ubicar". El panel se resalta mientras el invitado está encima. Soltar fuera del panel, sobre el plano vacío, deja al invitado en su silla. | S | S |
 | RF-39 | Arrastrar un invitado ya sentado y soltarlo sobre una silla ocupada intercambia a los dos: cada uno queda en la silla del otro. Mientras se lo arrastra encima, las dos sillas se marcan en color de acento en vez del rechazo rojo, y al soltar se muestra un aviso con los dos nombres. Un invitado que viene del panel lateral no tiene silla para dar, así que sobre una silla ocupada sigue siendo rechazado (RF-22). | S | M |
+| RF-42 | El editor funciona en celular. Por debajo de 768 px la barra superior se parte en dos filas (marca y evento arriba; contadores y acciones abajo, en una tira que se desplaza de costado), el panel de invitados pasa a ser una hoja inferior que se abre y se cierra tocando su encabezado, y el plano arranca con el zoom necesario para entrar entero en la pantalla. En ese modo no se arrastra: el invitado se sienta tocando una silla vacía (RF-25) y se saca desde el menú de la silla ocupada (RF-24). | S | M |
 | RF-40 | El buscador del panel lateral encuentra también a los invitados ya sentados, que hoy quedan fuera de la lista. Aparecen en un bloque "Ya sentados" con el nombre de su mesa. Al elegir uno, el plano se desplaza solo hasta esa mesa y la silla del invitado queda marcada unos segundos. | S | M |
 | RF-25 | Click sobre una silla vacía abre un selector con la lista de invitados sin ubicar (con buscador) y un campo "Nuevo invitado" para escribir un nombre y sentarlo directamente. | M | M |
 | RF-26 | "Autoubicar": sienta a todos los invitados sin ubicar, en el orden del panel, en las sillas libres recorriendo las mesas en orden. Si no alcanzan las sillas, los restantes quedan en el panel y se muestra un aviso. | S | S |
@@ -126,7 +127,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 ## 5. Requerimientos no funcionales
 
 - **Sin backend**: la aplicación es 100 % frontend y se publica como sitio estático.
-- **Navegadores**: el editor se usa en Chrome, Firefox o Edge de escritorio. La vista del invitado también en celular.
+- **Navegadores**: el editor se usa en Chrome, Firefox o Edge, de escritorio o de celular (RF-42: en celular se asigna tocando la silla, sin arrastrar). La vista del invitado también en celular.
 - **Link del invitado**: para 200 invitados el link comprimido ronda los 2 a 3 KB, muy por debajo del límite de los navegadores.
 - **Verificación**: manual, con una checklist por requerimiento. No hay tests automatizados.
 - **Idioma**: la interfaz y este documento están en español. El código, los identificadores y los commits están en inglés.

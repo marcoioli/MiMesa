@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 
+import { useIsCompact } from '../../app/useIsCompact';
 import { useSpotlightStore } from '../../app/useSpotlightStore';
 import {
   CANVAS_H,
@@ -51,6 +52,7 @@ export default function CanvasArea() {
   const spotlightGuestId = useSpotlightStore((state) => state.guestId);
   const spotlightNonce = useSpotlightStore((state) => state.nonce);
   const clearSpotlight = useSpotlightStore((state) => state.clear);
+  const isCompact = useIsCompact();
 
   const [addOpen, setAddOpen] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -82,6 +84,23 @@ export default function CanvasArea() {
     node.scrollLeft = anchor.canvasX * zoom - anchor.cx;
     node.scrollTop = anchor.canvasY * zoom - anchor.cy;
   }, [zoom]);
+
+  // RF-42: the canvas is a fixed 1600px wide, so on a phone it has to start zoomed
+  // out far enough to fit; 360px needs 0.225, which is why MIN_ZOOM is 0.2. Fitted
+  // once per switch into the compact layout, never on every resize, or it would
+  // undo the zooming the user just did.
+  const fittedRef = useRef(false);
+  useLayoutEffect(() => {
+    if (!isCompact) {
+      fittedRef.current = false;
+      return;
+    }
+    if (fittedRef.current) return;
+    const node = scrollerRef.current;
+    if (!node || node.clientWidth === 0) return;
+    fittedRef.current = true;
+    setZoom(clampZoom(node.clientWidth / CANVAS_W));
+  }, [isCompact]);
 
   // Ctrl + wheel (RF-36). React's `onWheel` is passive, so `preventDefault` needs
   // a native listener registered with `passive: false` or the browser zooms the page.
@@ -158,7 +177,7 @@ export default function CanvasArea() {
   const stepZoom = (delta: number) => setZoom((current) => clampZoom(current + delta));
 
   return (
-    <main className="relative min-w-0 flex-1 overflow-hidden bg-ground">
+    <main className="relative min-w-0 flex-1 overflow-hidden bg-ground max-md:pb-[52px]">
       <div ref={scrollerRef} className="canvas-scroll h-full w-full overflow-auto">
         {/* Sizing box: the scaled canvas has no layout size of its own. */}
         <div
@@ -197,7 +216,7 @@ export default function CanvasArea() {
       {/* Outside the scroller and outside the export node: always visible, never captured. */}
       <div
         data-export-ignore="true"
-        className="pointer-events-none absolute bottom-4 right-4 flex items-center gap-2"
+        className="pointer-events-none absolute bottom-4 right-4 flex items-center gap-2 max-md:bottom-[64px]"
       >
         <div className={`${OVERLAY_GROUP} pointer-events-auto`}>
           <button
@@ -250,7 +269,8 @@ export default function CanvasArea() {
         <button
           type="button"
           onClick={() => setAddOpen(true)}
-          className={`${OVERLAY_GROUP} pointer-events-auto gap-2 px-3 font-semibold text-ink-2 transition-colors duration-150 hover:border-accent hover:text-accent`}
+          aria-label="Agregar mesa"
+          className={`${OVERLAY_GROUP} pointer-events-auto gap-2 px-3 font-semibold text-ink-2 transition-colors duration-150 hover:border-accent hover:text-accent max-md:w-9 max-md:justify-center max-md:px-0`}
         >
           <svg
             width="16"
@@ -264,7 +284,7 @@ export default function CanvasArea() {
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          Agregar mesa
+          <span className="max-md:hidden">Agregar mesa</span>
         </button>
       </div>
 

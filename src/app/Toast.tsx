@@ -22,7 +22,7 @@ export function ToastHost() {
       data-export-ignore="true"
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed bottom-4 left-4 z-50 flex h-9 items-center rounded-lg bg-ink px-3.5 text-[13px] font-semibold text-white shadow-[0_1px_2px_rgba(20,28,45,.06),0_12px_32px_-12px_rgba(20,28,45,.4)]"
+      className="pointer-events-none fixed bottom-4 left-4 z-50 max-md:bottom-[64px] flex h-9 items-center rounded-lg bg-ink px-3.5 text-[13px] font-semibold text-white shadow-[0_1px_2px_rgba(20,28,45,.06),0_12px_32px_-12px_rgba(20,28,45,.4)]"
     >
       {message}
     </div>
