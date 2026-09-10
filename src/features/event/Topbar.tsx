@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import ConfirmDialog from '../../app/ConfirmDialog';
+import { counters } from '../../store/selectors';
 import { useEventStore } from '../../store/useEventStore';
 import ExportButton from '../export/ExportButton';
 import ShareButton from '../share/ShareButton';
@@ -23,6 +24,7 @@ export default function Topbar() {
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+  const stats = counters(event);
   const formattedDate = event?.date ? formatDate(event.date) : '';
   const place = event?.place?.trim();
   const metaText = formattedDate && place ? `${formattedDate} · ${place}` : formattedDate || place || '';
@@ -63,7 +65,28 @@ export default function Topbar() {
         </svg>
       </button>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
+          <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.total}</b>
+          <span>Invitados</span>
+        </div>
+        <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
+          <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.seated}</b>
+          <span>Sentados</span>
+        </div>
+        <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
+          <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.unseated}</b>
+          <span>Sin ubicar</span>
+        </div>
+        <div className="flex items-baseline gap-1 text-[12px] font-bold text-ink-3">
+          <b className="text-[15px] font-extrabold text-ink tabular-nums tracking-[-0.01em]">{stats.freeSeats}</b>
+          <span>Sillas libres</span>
+        </div>
+      </div>
+
+      <div className="h-6 w-px bg-line flex-none" />
+
+      <div className="flex items-center gap-2">
         <ExportButton />
         <ShareButton />
         <button
