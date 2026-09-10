@@ -99,7 +99,7 @@ export default function EventForm() {
           to="/"
           className="flex items-center gap-2 rounded focus:outline-none focus:ring-2 focus:ring-accent-soft"
         >
-          <img src="/logo-mark.svg" alt="" width={28} height={28} className="h-7 w-7" />
+          <img src="/logo-mark.png" alt="" width={28} height={28} className="h-7 w-7" />
           <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink">MiMesa</span>
         </Link>
 

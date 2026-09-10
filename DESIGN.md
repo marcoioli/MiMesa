@@ -8,9 +8,13 @@ Files in `public/`, served from the site root:
 
 | File | What | Where to use it |
 |---|---|---|
-| `/logo-mark.svg` | The table-with-chairs mark only, square | Topbar (28px, next to the "MiMesa" wordmark in text), guest view header (20px), favicon. Use `<img src="/logo-mark.svg" alt="">` with the wordmark as real text beside it. |
-| `/logo.png` | Mark plus "miMesa" wordmark, raster 1254x1254 | Home screen (144px), link previews (`og:image`), apple touch icon, README. This is the reference rendering of the full logo. |
-| `/logo.svg` | Same lockup as vector, square 1000x1000 | Kept for reference only. Its wordmark is a live `<text>` element depending on Arial Rounded MT Bold, so it renders differently on machines without that font. Do not use it in the UI; use `/logo.png` for the full lockup and `/logo-mark.svg` wherever the wordmark is real text beside the mark. |
+| `/logo-mark.png` | The table-with-chairs mark only, raster 144x144 on a transparent ground | Topbar (28px, next to the "MiMesa" wordmark in text), create-event header (28px), guest view header (20px), favicon. Use `<img src="/logo-mark.png" alt="">` with the wordmark as real text beside it. |
+| `/logo.png` | Mark plus "miMesa" wordmark, raster 1254x1254 on a transparent ground | Home screen (144px), link previews (`og:image`), apple touch icon, README. This is the reference rendering of the full logo. |
+| `/logo-mark.svg`, `/logo.svg` | The earlier vector lockup | Kept on disk for reference, used nowhere in the UI. `logo.svg`'s wordmark is a live `<text>` element depending on Arial Rounded MT Bold, so it renders differently on machines without that font. |
+
+`/logo-mark.png` is a square crop of `/logo.png` (720px box around the mark, downscaled 5:1),
+so both files are the same rendering and never drift apart. Regenerate it from `/logo.png`
+rather than editing it by hand.
 
 Never recolor, stretch or add effects to the logo. Keep at least its own height of clear space around it.
 
