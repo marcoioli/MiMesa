@@ -118,7 +118,12 @@ export default function CanvasArea() {
   useEffect(() => {
     if (spotlightGuestId === null) return;
     const node = scrollerRef.current;
-    const target = tables.find((table) => table.seats.includes(spotlightGuestId));
+    // Read through `getState()` rather than the rendered `tables`: the flight must
+    // start on the nonce alone, and closing over `tables` would either re-fly on
+    // every seat change or need a suppressed dependency.
+    const target = useEventStore
+      .getState()
+      .event?.tables.find((table) => table.seats.includes(spotlightGuestId));
     if (!node || !target) {
       clearSpotlight();
       return;
@@ -131,8 +136,6 @@ export default function CanvasArea() {
     });
     const timer = window.setTimeout(clearSpotlight, SPOTLIGHT_MS);
     return () => window.clearTimeout(timer);
-    // `tables` is intentionally out of the deps: a seat change during the mark must
-    // not re-fly the canvas. `nonce` is the only thing that starts a flight.
   }, [spotlightNonce, spotlightGuestId, clearSpotlight]);
 
   // RF-37: Escape deselects. Bound only while something is selected.
