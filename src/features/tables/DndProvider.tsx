@@ -86,7 +86,13 @@ const collisionDetection: CollisionDetection = (args) => {
   // hit, so a guest released over empty canvas would be seated at the nearest
   // table. `rectIntersection` only matches droppables the dragged chip overlaps.
   const within = pointerWithin(args);
-  const hits = within.length > 0 ? within : rectIntersection(args);
+  // The sidebar is a full-height 300px target, so it only ever wins under the
+  // pointer: in the overlap fallback it would swallow drops meant for the empty
+  // canvas beside it and unseat the guest by accident (RF-38).
+  const hits =
+    within.length > 0
+      ? within
+      : rectIntersection(args).filter((hit) => dropDataOf(hit.data)?.type !== 'sidebar');
   if (hits.length === 0) return [];
   const seats = hits.filter((hit) => dropDataOf(hit.data)?.type === 'seat');
   return seats.length > 0 ? seats : hits;
@@ -94,6 +100,8 @@ const collisionDetection: CollisionDetection = (args) => {
 
 /** Whether `seatGuest` would refuse this drop, so the ring can be drawn before the release. */
 function rejects(event: Event | null, guestId: string, drop: DropData): boolean {
+  // The sidebar always accepts: a seated guest is released, an unseated one is a no-op.
+  if (drop.type === 'sidebar') return false;
   const table = event?.tables.find((candidate) => candidate.id === drop.tableId);
   if (!table) return false;
   // RF-21 takes the first free seat, so a table with none refuses the drop.
@@ -109,6 +117,7 @@ function rejects(event: Event | null, guestId: string, drop: DropData): boolean 
  */
 export default function DndProvider({ children }: { children: ReactNode }) {
   const seatGuest = useEventStore((state) => state.seatGuest);
+  const unseatGuest = useEventStore((state) => state.unseatGuest);
   const moveTable = useEventStore((state) => state.moveTable);
   const toast = useToastStore((state) => state.toast);
 
@@ -148,7 +157,7 @@ export default function DndProvider({ children }: { children: ReactNode }) {
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     const data = active.data.current as DragData | undefined;
     const drop = over?.data.current as DropData | undefined;
-    if (!data || data.type !== 'guest' || !drop) {
+    if (!data || data.type !== 'guest' || !drop || drop.type === 'sidebar') {
       setRejection(null);
       return;
     }
@@ -179,6 +188,14 @@ export default function DndProvider({ children }: { children: ReactNode }) {
     const drop = over?.data.current as DropData | undefined;
     if (!drop) {
       setRejection(null); // dropped nowhere: dnd-kit returns the chip, nothing changes.
+      return;
+    }
+
+    // RF-38: released over the sidebar, a seated guest goes back to "Sin ubicar".
+    // A guest dragged out of the sidebar and back is already unseated: no-op.
+    if (drop.type === 'sidebar') {
+      setRejection(null);
+      if (data.from !== null) unseatGuest(data.guestId);
       return;
     }
 

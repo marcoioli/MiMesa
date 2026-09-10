@@ -93,6 +93,34 @@ at least 5 pixels.
 - WHEN the organizer presses and releases without moving 5 pixels
 - THEN the menu opens and no seat assignment changed
 
+### Requirement: Unseat by dragging to the sidebar (RF-38)
+
+The unseated-guest sidebar MUST be a drop target. Releasing a seated guest anywhere over the
+panel MUST free the origin seat and return the guest to the "Sin ubicar" list, the same outcome
+RF-24 reaches through the menu. Releasing a guest that is already unseated MUST change nothing.
+While a seated guest is held over the panel, the panel MUST show the drop-target treatment
+(accent border and `accent-soft` fill). The sidebar MUST only win a collision when the pointer
+is inside it, never through chip overlap, so a drop over the empty canvas beside the panel keeps
+the guest seated.
+
+#### Scenario: Drag a seated guest back to the sidebar
+
+- GIVEN "Ana" occupies seat 1 of "Mesa 1"
+- WHEN the organizer drags "Ana" onto the sidebar and releases
+- THEN seat 1 of "Mesa 1" is empty, "Ana" appears under "Sin ubicar", and the counters follow
+
+#### Scenario: Dropping beside the sidebar keeps the seat
+
+- GIVEN "Ana" occupies seat 1 of "Mesa 1"
+- WHEN the organizer releases her over the empty canvas next to the panel, with the pointer outside it
+- THEN "Ana" still occupies seat 1 of "Mesa 1"
+
+#### Scenario: Sidebar drop of an unseated guest changes nothing
+
+- GIVEN "Pedro" is unseated
+- WHEN the organizer drags "Pedro" and releases him over the sidebar
+- THEN "Pedro" is still unseated and no seat changed
+
 ### Requirement: Empty seat picker (RF-25)
 
 Clicking an empty seat MUST open a picker listing the unseated guests with its own search

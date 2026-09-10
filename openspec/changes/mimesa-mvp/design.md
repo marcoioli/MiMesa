@@ -36,7 +36,7 @@ src/
 | D8 | Fragment written and read **raw** | `encodeURIComponent` / `URLSearchParams` | `lz-string`'s URI-safe alphabet contains `+` and `$`, and `decompressFromEncodedURIComponent` starts with `input.replace(/ /g, "+")`. Escaping or query-string round-tripping silently breaks every link. |
 | D9 | QR guarded by URL length (1,200 chars), `level="L"` | try/catch around the QR | `qrcode.react@4.2.0` throws **synchronously during render** past the 2,953-byte byte-mode ceiling, which unmounts the dialog. A guard is the only fix that keeps the dialog alive. |
 | D10 | Canvas 1600×1200, 5×4 grid, **max 20 tables** | Exploration assumption 1 (up to 30 tables) + assumption 2 (4 cols / 260 pitch / 60 margin) | 30 tables at a 260px pitch need 1,880px of height and do not fit a fixed 1600×1200 canvas. 5 cols × 290px + 4 rows × 270px from a 50px margin fits exactly 20 non-overlapping tables **even at capacity 20** (`tableBox(20) = 258`). 20 tables × 20 seats = 400 seats, double the 200-guest NFR. |
-| D11 | No sidebar droppable; unseating is menu-only (RF-24) | Drag a seated guest back to the sidebar | No RF asks for it, and it would force dnd-kit wiring into `GuestSidebar.tsx` (track A), coupling A to B. |
+| D11 | ~~No sidebar droppable; unseating is menu-only (RF-24)~~ **Reversed.** The sidebar **is** a droppable: releasing a seated guest over it unseats them (RF-38), next to the RF-24 menu | Menu-only unseating, the original decision | Reversed on `main` after tracks A and B merged, at the product owner's request: dragging a guest out is the gesture organizers reach for first. The two rationales for the original decision are both spent — RF-38 now asks for it, and with A and B merged the "coupling A to B" cost is gone. The wiring is one `useDroppable` in `GuestSidebar.tsx`. Consequence to respect: the sidebar is a 300px full-height target, so it may only win a collision **under the pointer** and must be filtered out of the `rectIntersection` fallback, or it swallows drops meant for the empty canvas beside it. |
 | D12 | Transient UI state (search text, open dialogs, selection) stays in component state | Add it to the store behind `partialize` | Keeps `localStorage` clean and keeps the frozen store from becoming a merge point again. |
 
 ## Data Model and Store
@@ -146,11 +146,13 @@ export type GuestDragData = { type: 'guest'; guestId: string; from: { tableId: s
 export type TableDragData = { type: 'table'; tableId: string; x: number; y: number };
 export type SeatDropData  = { type: 'seat'; tableId: string; seatIndex: number };
 export type TableDropData = { type: 'table'; tableId: string };
+export type SidebarDropData = { type: 'sidebar' };                    // RF-38, D11 reversed
 
 export const guestDragId = (id: string) => `guest:${id}`;
 export const tableDragId = (id: string) => `tablemove:${id}`;
 export const seatDropId  = (t: string, i: number) => `seat:${t}:${i}`;
 export const tableDropId = (t: string) => `table:${t}`;
+export const SIDEBAR_DROP_ID = 'sidebar';                             // fixed id, single droppable
 ```
 
 - **Sensors**: `useSensor(PointerSensor, { activationConstraint: { distance: 5 } })`. Under 5px of movement no drag starts, so RF-24 (click a seated guest) and RF-08 (double-click the table name) coexist with RF-23 and RF-11 on the same elements. Draggables set `style={{ touchAction: 'none' }}`.
@@ -160,7 +162,13 @@ export const tableDropId = (t: string) => `table:${t}`;
 ```ts
 const collision: CollisionDetection = (args) => {
   if ((args.active.data.current as DragData)?.type === 'table') return [];      // tables need no droppable
-  const hits = pointerWithin(args).length ? pointerWithin(args) : closestCenter(args);
+  // NOT closestCenter as the fallback: it always returns a hit, so a guest released over
+  // empty canvas would be seated at the nearest table. rectIntersection only matches
+  // droppables the dragged chip overlaps - and never the sidebar, a 300px full-height
+  // target that would otherwise swallow drops meant for the canvas beside it (RF-38).
+  const within = pointerWithin(args);
+  const hits = within.length ? within
+    : rectIntersection(args).filter(h => dropDataOf(h.data)?.type !== 'sidebar');
   // droppableContainers is an array in @dnd-kit/core 6.x; the collision payload already carries the container
   const seats = hits.filter(h => h.data?.droppableContainer?.data.current?.type === 'seat');
   return seats.length ? seats : hits;                                            // seat beats table body
