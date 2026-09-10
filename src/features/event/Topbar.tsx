@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import ConfirmDialog from '../../app/ConfirmDialog';
+import { useToastStore } from '../../app/useToastStore';
 import { counters } from '../../store/selectors';
 import { useEventStore } from '../../store/useEventStore';
 import ExportButton from '../export/ExportButton';
@@ -22,6 +23,8 @@ export default function Topbar() {
   const event = useEventStore((s) => s.event);
   const resetEvent = useEventStore((s) => s.resetEvent);
   const clearAllTables = useEventStore((s) => s.clearAllTables);
+  const autoSeat = useEventStore((s) => s.autoSeat);
+  const toast = useToastStore((s) => s.toast);
 
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
   const [isClearAllDialogOpen, setIsClearAllDialogOpen] = useState(false);
@@ -40,6 +43,15 @@ export default function Topbar() {
   const handleConfirmClearAll = () => {
     setIsClearAllDialogOpen(false);
     clearAllTables();
+  };
+
+  const handleAutoSeat = () => {
+    const { seated, leftover } = autoSeat();
+    let message = `Se ubicaron ${seated} invitados.`;
+    if (leftover > 0) {
+      message = `${message} Quedaron ${leftover} invitados sin ubicar por falta de sillas.`;
+    }
+    toast(message);
   };
 
   return (
@@ -95,6 +107,27 @@ export default function Topbar() {
       <div className="h-6 w-px bg-line flex-none" />
 
       <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={handleAutoSeat}
+          className="inline-flex h-[34px] items-center gap-1.5 rounded-lg border border-line-2 bg-panel px-3 text-[13px] font-semibold text-ink transition hover:border-ink-3 active:bg-ground"
+        >
+          <svg
+            className="h-4 w-4 stroke-current stroke-[1.75]"
+            viewBox="0 0 24 24"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M16 3h5v5" />
+            <path d="M4 20 21 3" />
+            <path d="M21 16v5h-5" />
+            <path d="m15 15 6 6" />
+            <path d="M4 4l5 5" />
+          </svg>
+          Autoubicar
+        </button>
         <button
           type="button"
           onClick={() => setIsClearAllDialogOpen(true)}
