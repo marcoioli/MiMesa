@@ -21,7 +21,10 @@ function formatDate(isoDate: string): string {
 export default function Topbar() {
   const event = useEventStore((s) => s.event);
   const resetEvent = useEventStore((s) => s.resetEvent);
+  const clearAllTables = useEventStore((s) => s.clearAllTables);
+
   const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [isClearAllDialogOpen, setIsClearAllDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const stats = counters(event);
@@ -32,6 +35,11 @@ export default function Topbar() {
   const handleConfirmReset = () => {
     setIsResetDialogOpen(false);
     resetEvent();
+  };
+
+  const handleConfirmClearAll = () => {
+    setIsClearAllDialogOpen(false);
+    clearAllTables();
   };
 
   return (
@@ -87,6 +95,13 @@ export default function Topbar() {
       <div className="h-6 w-px bg-line flex-none" />
 
       <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setIsClearAllDialogOpen(true)}
+          className="inline-flex h-[34px] items-center gap-1.5 rounded-lg px-3 text-[13px] font-semibold text-ink-2 transition hover:bg-ground hover:text-ink active:bg-ground"
+        >
+          Vaciar todas las mesas
+        </button>
         <ExportButton />
         <ShareButton />
         <button
@@ -110,6 +125,14 @@ export default function Topbar() {
       </div>
 
       <EventEditDialog open={isEditDialogOpen} onClose={() => setIsEditDialogOpen(false)} />
+
+      <ConfirmDialog
+        open={isClearAllDialogOpen}
+        message="¿Vaciar todas las mesas? Los invitados vuelven al panel."
+        confirmLabel="Confirmar"
+        onConfirm={handleConfirmClearAll}
+        onCancel={() => setIsClearAllDialogOpen(false)}
+      />
 
       <ConfirmDialog
         open={isResetDialogOpen}
