@@ -17,7 +17,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { ReactNode, RefObject } from 'react';
 
 import { useToastStore } from '../../app/useToastStore';
-import type { DragData, DropData } from '../../lib/dnd';
+import type { DragData, DropData, GuestDragData } from '../../lib/dnd';
 import { guestNamesById } from '../../store/selectors';
 import type { Event } from '../../store/types';
 import { useEventStore } from '../../store/useEventStore';
@@ -33,11 +33,20 @@ type Rejection =
   | { kind: 'table'; tableId: string }
   | null;
 
+/** One end of a pending swap (RF-39): a seat that will change occupant on release. */
+type SeatRef = { tableId: string; seatIndex: number };
+
 export type DndFeedback = {
   /** Index of the seat this table must draw as refused, or `undefined` (RF-22). */
   rejectedSeatIndex: (tableId: string) => number | undefined;
   /** Whether this table's disc must draw the full-table red ring (RF-22). */
   isTableRejected: (tableId: string) => boolean;
+  /**
+   * Whether this seat is one of the two ends of a swap the pointer is currently
+   * offering (RF-39). Both the origin and the target answer `true`, so the two
+   * seats about to trade occupants light up together.
+   */
+  isSwapSeat: (tableId: string, seatIndex: number) => boolean;
   /**
    * Current canvas zoom (RF-36). A ref, not state: `DndProvider` sits above
    * `CanvasArea` in the tree, and a zoom change must not re-render every table.
@@ -50,6 +59,7 @@ export type DndFeedback = {
 const NO_FEEDBACK: DndFeedback = {
   rejectedSeatIndex: () => undefined,
   isTableRejected: () => false,
+  isSwapSeat: () => false,
   zoom: { current: 1 },
   setCanvasZoom: () => undefined,
 };
@@ -98,16 +108,25 @@ const collisionDetection: CollisionDetection = (args) => {
   return seats.length > 0 ? seats : hits;
 };
 
-/** Whether `seatGuest` would refuse this drop, so the ring can be drawn before the release. */
-function rejects(event: Event | null, guestId: string, drop: DropData): boolean {
+/** What releasing here would do. Decided before the drop so the ring matches the outcome. */
+type Outcome = 'ok' | 'swap' | 'reject';
+
+/**
+ * `ok` seats or unseats, `swap` trades two seated guests (RF-39), `reject` draws the
+ * RF-22 red ring. Pure, so `handleDragOver` and `handleDragEnd` cannot disagree.
+ */
+function outcomeOf(event: Event | null, drag: GuestDragData, drop: DropData): Outcome {
   // The sidebar always accepts: a seated guest is released, an unseated one is a no-op.
-  if (drop.type === 'sidebar') return false;
+  if (drop.type === 'sidebar') return 'ok';
   const table = event?.tables.find((candidate) => candidate.id === drop.tableId);
-  if (!table) return false;
+  if (!table) return 'ok';
   // RF-21 takes the first free seat, so a table with none refuses the drop.
-  if (drop.type === 'table') return !table.seats.includes(null);
+  if (drop.type === 'table') return table.seats.includes(null) ? 'ok' : 'reject';
   const occupant = table.seats[drop.seatIndex] ?? null;
-  return occupant !== null && occupant !== guestId;
+  if (occupant === null || occupant === drag.guestId) return 'ok';
+  // RF-39: two seated guests trade places. A guest arriving from the sidebar has no
+  // seat to give in return, so an occupied seat still refuses it (RF-22).
+  return drag.from !== null ? 'swap' : 'reject';
 }
 
 /**
@@ -123,6 +142,8 @@ export default function DndProvider({ children }: { children: ReactNode }) {
 
   const [dragName, setDragName] = useState<string | null>(null);
   const [rejection, setRejection] = useState<Rejection>(null);
+  /** The two seats a release would swap right now (RF-39), origin first. */
+  const [swap, setSwap] = useState<[SeatRef, SeatRef] | null>(null);
   const flashTimer = useRef<number | null>(null);
   const zoom = useRef(1);
 
@@ -146,6 +167,7 @@ export default function DndProvider({ children }: { children: ReactNode }) {
   const handleDragStart = ({ active }: DragStartEvent) => {
     cancelFlash();
     setRejection(null);
+    setSwap(null);
     const data = active.data.current as DragData | undefined;
     setDragName(
       data?.type === 'guest'
@@ -159,9 +181,19 @@ export default function DndProvider({ children }: { children: ReactNode }) {
     const drop = over?.data.current as DropData | undefined;
     if (!data || data.type !== 'guest' || !drop || drop.type === 'sidebar') {
       setRejection(null);
+      setSwap(null);
       return;
     }
-    if (!rejects(useEventStore.getState().event, data.guestId, drop)) {
+    const outcome = outcomeOf(useEventStore.getState().event, data, drop);
+
+    // RF-39: light both ends while the pointer offers the trade.
+    setSwap(
+      outcome === 'swap' && drop.type === 'seat' && data.from !== null
+        ? [data.from, { tableId: drop.tableId, seatIndex: drop.seatIndex }]
+        : null,
+    );
+
+    if (outcome !== 'reject') {
       setRejection(null);
       return;
     }
@@ -174,6 +206,7 @@ export default function DndProvider({ children }: { children: ReactNode }) {
 
   const handleDragEnd = ({ active, delta, over }: DragEndEvent) => {
     setDragName(null);
+    setSwap(null);
     const data = active.data.current as DragData | undefined;
     if (!data) return;
 
@@ -197,6 +230,33 @@ export default function DndProvider({ children }: { children: ReactNode }) {
       setRejection(null);
       if (data.from !== null) unseatGuest(data.guestId);
       return;
+    }
+
+    const event = useEventStore.getState().event;
+    const origin = data.from;
+
+    // RF-39: an occupied seat trades occupants instead of refusing, as long as the
+    // dragged guest arrives from a seat of their own to give in return.
+    if (origin !== null && drop.type === 'seat' && outcomeOf(event, data, drop) === 'swap') {
+      const target = event?.tables.find((table) => table.id === drop.tableId);
+      const occupant = target?.seats[drop.seatIndex] ?? null;
+      if (occupant !== null) {
+        setRejection(null);
+        // Order matters and no new store action is needed: freeing the target first
+        // lets the dragged guest take it, which in turn frees the origin (RF-23) for
+        // the occupant. If the middle step ever failed, the occupant is put back.
+        unseatGuest(occupant);
+        if (seatGuest(data.guestId, drop.tableId, drop.seatIndex)) {
+          seatGuest(occupant, origin.tableId, origin.seatIndex);
+          const names = guestNamesById(event);
+          const moved = names.get(data.guestId);
+          const swapped = names.get(occupant);
+          if (moved && swapped) toast(`Intercambiaste a ${moved} con ${swapped}.`);
+        } else {
+          seatGuest(occupant, drop.tableId, drop.seatIndex);
+        }
+        return;
+      }
     }
 
     const seated =
@@ -225,6 +285,7 @@ export default function DndProvider({ children }: { children: ReactNode }) {
   const handleDragCancel = () => {
     setDragName(null);
     setRejection(null);
+    setSwap(null);
   };
 
   const feedback = useMemo<DndFeedback>(
@@ -234,10 +295,13 @@ export default function DndProvider({ children }: { children: ReactNode }) {
           ? rejection.seatIndex
           : undefined,
       isTableRejected: (tableId) => rejection?.kind === 'table' && rejection.tableId === tableId,
+      isSwapSeat: (tableId, seatIndex) =>
+        swap !== null &&
+        swap.some((end) => end.tableId === tableId && end.seatIndex === seatIndex),
       zoom,
       setCanvasZoom,
     }),
-    [rejection, setCanvasZoom],
+    [rejection, swap, setCanvasZoom],
   );
 
   return (

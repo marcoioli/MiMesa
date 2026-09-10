@@ -38,11 +38,14 @@ function SeatDroppable({
   tableId,
   seatIndex,
   occupied,
+  swapping,
   children,
 }: {
   tableId: string;
   seatIndex: number;
   occupied: boolean;
+  /** RF-39: this seat is one of the two about to trade occupants. */
+  swapping: boolean;
   children: ReactNode;
 }) {
   const { isOver, setNodeRef } = useDroppable({
@@ -50,13 +53,19 @@ function SeatDroppable({
     data: { type: 'seat', tableId, seatIndex } satisfies SeatDropData,
   });
 
+  // A pending swap wins over the plain hover ring: it is the stronger signal, and it
+  // is the only one that also lights the origin seat, which the pointer is not over.
+  const ring = swapping
+    ? 'ring-2 ring-accent shadow-[0_0_0_5px_var(--color-accent-soft)]'
+    : isOver && !occupied
+      ? 'ring-2 ring-accent'
+      : '';
+
   // The wrapper MUST stay `w-full h-full`, or the drop rect stops matching the seat.
   return (
     <div
       ref={setNodeRef}
-      className={`h-full w-full rounded-full transition-shadow duration-150 ${
-        isOver && !occupied ? 'ring-2 ring-accent' : ''
-      }`}
+      className={`h-full w-full rounded-full transition-shadow duration-150 ${ring}`}
     >
       {children}
     </div>
@@ -170,7 +179,12 @@ export default function TableNode({ table, selected, onSelect }: TableNodeProps)
   const renderSeat: NonNullable<TableViewProps['renderSeat']> = (seat) => {
     const guestId = table.seats[seat.index] ?? null;
     return (
-      <SeatDroppable tableId={table.id} seatIndex={seat.index} occupied={guestId !== null}>
+      <SeatDroppable
+        tableId={table.id}
+        seatIndex={seat.index}
+        occupied={guestId !== null}
+        swapping={feedback.isSwapSeat(table.id, seat.index)}
+      >
         {guestId === null ? (
           seat.node
         ) : (
