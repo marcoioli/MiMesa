@@ -3,6 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { MouseEvent, PointerEvent, ReactNode } from 'react';
 
 import GuestDraggable from '../../app/dnd/GuestDraggable';
+import { useIsCompact } from '../../app/useIsCompact';
 import { useSpotlightStore } from '../../app/useSpotlightStore';
 import { MAX_TABLE_SCALE, MIN_TABLE_SCALE, TABLE_SCALE_STEP } from '../../lib/constants';
 import type { SeatDropData, TableDragData, TableDropData } from '../../lib/dnd';
@@ -175,9 +176,13 @@ export default function TableNode({ table, selected, onSelect }: TableNodeProps)
 
   // RF-11: the listeners go on the centre label only. On the whole node a
   // pointerdown over a seated guest would bubble and start a table drag.
+  // RF-42: moving tables around is a desktop gesture. On touch the handle stops
+  // dragging so a finger resting on a table pans the canvas instead.
+  const isCompact = useIsCompact();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: tableDragId(table.id),
     data: { type: 'table', tableId: table.id, x: table.x, y: table.y } satisfies TableDragData,
+    disabled: isCompact,
   });
 
   const openGuestMenu = (mouse: MouseEvent<HTMLDivElement>, guestId: string) => {
@@ -236,7 +241,7 @@ export default function TableNode({ table, selected, onSelect }: TableNodeProps)
     ) : (
       <div
         className="flex w-full cursor-grab items-center justify-center active:cursor-grabbing"
-        style={{ touchAction: 'none' }}
+        style={isCompact ? undefined : { touchAction: 'none' }}
         onDoubleClick={() => setMenu({ kind: 'rename' })}
         {...listeners}
         {...attributes}

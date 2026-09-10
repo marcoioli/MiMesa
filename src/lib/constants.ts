@@ -18,8 +18,11 @@ export const MIN_TABLE_SCALE = 0.75;
 export const MAX_TABLE_SCALE = 2;
 export const TABLE_SCALE_STEP = 0.25;
 
-/** Canvas zoom (RF-36). UI state only, never persisted. */
-export const MIN_ZOOM = 0.5;
+/**
+ * Canvas zoom (RF-36). UI state only, never persisted. The floor is low enough
+ * for the whole 1600px canvas to fit a 360px phone (RF-42), which needs 0.225.
+ */
+export const MIN_ZOOM = 0.2;
 export const MAX_ZOOM = 2;
 export const ZOOM_STEP = 0.1;
 

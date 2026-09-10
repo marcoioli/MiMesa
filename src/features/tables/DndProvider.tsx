@@ -16,6 +16,7 @@ import type {
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode, RefObject } from 'react';
 
+import { useIsCompact } from '../../app/useIsCompact';
 import { useToastStore } from '../../app/useToastStore';
 import type { DragData, DropData, GuestDragData } from '../../lib/dnd';
 import { guestNamesById } from '../../store/selectors';
@@ -153,7 +154,14 @@ export default function DndProvider({ children }: { children: ReactNode }) {
 
   // 5px of movement before a drag starts, so RF-24 (click a seated guest) and
   // RF-08 (double-click the table name) coexist with RF-23 and RF-11.
-  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
+  const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 5 } });
+  const pointerSensors = useSensors(pointerSensor);
+  // RF-42: both lists are called unconditionally, because `useSensor` is a hook.
+  // With no sensor the context can never start a drag, so a touch gesture stays a
+  // scroll and the tap paths (RF-24, RF-25) do the seating instead.
+  const noSensors = useSensors();
+  const isCompact = useIsCompact();
+  const sensors = isCompact ? noSensors : pointerSensors;
 
   const cancelFlash = useCallback(() => {
     if (flashTimer.current !== null) {
