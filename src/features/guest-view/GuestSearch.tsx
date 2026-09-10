@@ -49,7 +49,7 @@ export default function GuestSearch({ payload, onSelectMatch }: GuestSearchProps
         <label htmlFor="guest-search-input" className="text-[14px] font-extrabold text-ink">
           Buscá tu nombre
         </label>
-        <div className="relative flex h-[52px] items-center rounded-xl border-2 border-line-2 bg-panel px-3.5 transition focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-soft">
+        <div className="relative flex h-[52px] items-center rounded-xl border-2 border-line-2 bg-panel pl-3.5 pr-1 transition focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-soft">
           <svg
             className="mr-2.5 h-5 w-5 flex-none stroke-ink-3 stroke-[2]"
             viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ export default function GuestSearch({ payload, onSelectMatch }: GuestSearchProps
               type="button"
               onClick={() => setQuery('')}
               aria-label="Borrar búsqueda"
-              className="p-1 text-ink-3 transition hover:text-ink"
+              className="flex h-[44px] w-[44px] flex-none items-center justify-center text-ink-3 transition hover:text-ink"
             >
               <svg
                 className="h-4 w-4 stroke-current stroke-[2]"
@@ -104,8 +104,8 @@ export default function GuestSearch({ payload, onSelectMatch }: GuestSearchProps
               onClick={() => onSelectMatch?.(match)}
               className="flex min-h-[52px] w-full cursor-pointer items-center justify-between rounded-[10px] border border-line bg-panel px-4 text-left font-bold text-ink transition hover:border-line-2 hover:bg-accent-soft/40 active:bg-accent-soft"
             >
-              <span className="text-[15px]">{match.name}</span>
-              <span className="text-[13px] font-semibold text-ink-3">{match.tableName}</span>
+              <span className="truncate pr-2 text-[15px]">{match.name}</span>
+              <span className="flex-none text-[13px] font-semibold text-ink-3">{match.tableName}</span>
             </button>
           ))}
         </div>

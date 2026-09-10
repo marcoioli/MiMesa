@@ -81,7 +81,7 @@ export default function GuestResult({ payload, match, onBack }: GuestResultProps
   return (
     <div className="flex flex-col gap-5">
       {/* Top bar with back button and event name */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={onBack}
@@ -99,20 +99,20 @@ export default function GuestResult({ payload, match, onBack }: GuestResultProps
           </svg>
           <span>Buscar otro nombre</span>
         </button>
-        <span className="max-w-[180px] truncate text-[12px] font-semibold text-ink-3">
+        <span className="max-w-[140px] sm:max-w-[180px] truncate text-right text-[12px] font-semibold text-ink-3">
           {payload.n}
         </span>
       </div>
 
       {/* Headline: Caption and Table name on its own line */}
       <div className="flex flex-col gap-1">
-        <span className="text-[15px] font-bold text-ink-3">Estás en la mesa</span>
-        <h1 className="text-[32px] font-extrabold leading-tight tracking-[-0.03em] text-accent">
+        <span className="text-[14px] sm:text-[15px] font-bold text-ink-3">Estás en la mesa</span>
+        <h1 className="break-words text-[28px] sm:text-[32px] font-extrabold leading-tight tracking-[-0.03em] text-accent">
           {table.n}
         </h1>
       </div>
 
-      {/* Table drawing */}
+      {/* Table drawing: centered, overflow hidden, responsive */}
       <div
         className="relative flex h-[280px] w-full items-center justify-center overflow-hidden rounded-[14px] border border-line bg-panel"
         style={{
@@ -121,12 +121,14 @@ export default function GuestResult({ payload, match, onBack }: GuestResultProps
           backgroundPosition: '10px 10px',
         }}
       >
-        <TableView
-          name={table.n}
-          capacity={table.s.length}
-          seatNames={table.s}
-          highlightSeatIndex={match.seatIndex}
-        />
+        <div className="flex max-w-full items-center justify-center overflow-hidden">
+          <TableView
+            name={table.n}
+            capacity={table.s.length}
+            seatNames={table.s}
+            highlightSeatIndex={match.seatIndex}
+          />
+        </div>
       </div>
 
       {/* Seated guests list */}
@@ -136,16 +138,16 @@ export default function GuestResult({ payload, match, onBack }: GuestResultProps
           if (!seatName) return null;
           const isMe = idx === match.seatIndex;
           return (
-            <div key={idx} className="flex min-h-[36px] items-center gap-2.5 font-semibold text-ink">
+            <div key={idx} className="flex min-h-[44px] items-center gap-2.5 font-semibold text-ink">
               <span
-                className={`flex h-[26px] w-[26px] items-center justify-center rounded-full text-[10px] font-extrabold ${
+                className={`flex h-[28px] w-[28px] flex-none items-center justify-center rounded-full text-[10px] font-extrabold ${
                   isMe ? 'bg-accent text-white' : 'bg-seat-on text-ink-2'
                 }`}
               >
                 {initialsOf(seatName)}
               </span>
-              <span className="text-[14px]">{seatName}</span>
-              {isMe && <span className="ml-auto text-[12px] font-extrabold text-accent">vos</span>}
+              <span className="truncate text-[14px]">{seatName}</span>
+              {isMe && <span className="ml-auto flex-none text-[12px] font-extrabold text-accent">vos</span>}
             </div>
           );
         })}
