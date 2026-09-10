@@ -14,7 +14,7 @@ export default function ExportButton() {
     if (!event || isExporting) return;
     setIsExporting(true);
     try {
-      await exportCanvas(event.name);
+      await exportCanvas(event.name, event.tables);
     } catch {
       // Ignore export error
     } finally {
