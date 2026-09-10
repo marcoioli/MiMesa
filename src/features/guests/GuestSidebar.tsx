@@ -1,5 +1,6 @@
 import { unseatedGuests } from '../../store/selectors';
 import { useEventStore } from '../../store/useEventStore';
+import BulkAddGuests from './BulkAddGuests';
 import GuestCard from './GuestCard';
 
 export default function GuestSidebar() {
@@ -21,6 +22,8 @@ export default function GuestSidebar() {
           <GuestCard key={guest.id} guest={guest} />
         ))}
       </div>
+
+      <BulkAddGuests />
     </aside>
   );
 }
