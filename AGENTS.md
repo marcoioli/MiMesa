@@ -6,14 +6,15 @@ You are working inside a small, time-boxed student project. Three people build t
 
 ## 0. Current state
 
-- Phase 0 (frozen base) and **track B** (canvas, tables, drag and drop, zoom, table size) are done and merged into `main`. Do not work on track B.
-- Open tracks: **A** (event and guests) and **C** (share, guest view, PNG export). Each has a guide in `docs/tracks/`.
-- Phase 4 (integration on the deploy) runs after A and C are merged.
+- Phase 0 (frozen base), **track B** (canvas, tables, drag and drop, zoom, table size) and **track A** (event and guests) are done and merged into `main`. Do not work on A or B.
+- The only open track is **C** (share, guest view, PNG export), with its guide in `docs/tracks/track-c.md`. `docs/tracks/track-a.md` stays as a reference for a closed track.
+- RF-38 (drop a seated guest on the sidebar to unseat them) was agreed after the split and made on `main`, because it crosses the base, track A and track B. Cross-track changes live under "Post-merge changes" in `tasks.md` and always need Marco's agreement and a requirement id first.
+- Phase 4 (integration on the deploy) runs after C is merged.
 
 ## 1. How to answer "leé el README y decime qué hacer"
 
-1. Read, in order: `README.md`, this file, `openspec/changes/mimesa-mvp/tasks.md`, the track guide (`docs/tracks/track-a.md` or `track-c.md`), `docs/requirements.md`, the spec files under `openspec/changes/mimesa-mvp/specs/` for the requirement ids of the next task, `openspec/changes/mimesa-mvp/design.md`, `openspec/changes/mimesa-mvp/apply-progress.md`, `DESIGN.md`, the mockup(s) the track guide names under `docs/design/`, and then, for full context, `PRODUCT.md`, `openspec/changes/mimesa-mvp/proposal.md` and `openspec/changes/mimesa-mvp/exploration.md`. Read all of them before proposing the first task; the decisions they record are settled and are not to be reopened.
-2. Determine the track: the user tells you, or the branch name does (`feat/track-a-event-guests` = A, `feat/track-c-share-guestview-export` = C). If neither, ask, then stop.
+1. Read, in order: `README.md`, this file, `openspec/changes/mimesa-mvp/tasks.md`, the track guide (`docs/tracks/track-c.md`), `docs/requirements.md`, the spec files under `openspec/changes/mimesa-mvp/specs/` for the requirement ids of the next task, `openspec/changes/mimesa-mvp/design.md`, `openspec/changes/mimesa-mvp/apply-progress.md`, `DESIGN.md`, the mockup(s) the track guide names under `docs/design/`, and then, for full context, `PRODUCT.md`, `openspec/changes/mimesa-mvp/proposal.md` and `openspec/changes/mimesa-mvp/exploration.md`. Read all of them before proposing the first task; the decisions they record are settled and are not to be reopened.
+2. Determine the track: only C is open (`feat/track-c-share-guestview-export`). If the user says they are on A or B, stop and tell them those tracks are already merged into `main`.
 3. Find the first unchecked `- [ ]` task of that track in `tasks.md`.
 4. Tell the user, in their language, in a few sentences: the task id, the requirement ids, the files you will create or edit, the store actions and base contracts you will use, and the exact "Done when" check. Then STOP and wait for their OK. Do not write code before it.
 5. After the OK: implement that one task only, run `npx tsc --noEmit -p tsconfig.app.json`, and give the user the concrete steps to verify in `npm run dev`. Never claim a browser check you did not run.
@@ -26,10 +27,10 @@ If the user asks for something outside the track's tasks (a new feature, a chang
 
 | Track | Branch | Editable paths |
 |---|---|---|
-| A | `feat/track-a-event-guests` | `src/features/event/**`, `src/features/guests/**` |
-| C | `feat/track-c-share-guestview-export` | `src/features/share/**`, `src/features/guest-view/**`, `src/features/export/**` |
+| C (the only open one) | `feat/track-c-share-guestview-export` | `src/features/share/**`, `src/features/guest-view/**`, `src/features/export/**` |
+| ~~A~~ (finished, merged) | `feat/track-a-event-guests` | `src/features/event/**`, `src/features/guests/**` — now frozen |
 
-Everything else is FROZEN: `src/app/**`, `src/store/**`, `src/lib/**`, `src/features/tables/**` (track B, finished), `src/index.css`, `src/main.tsx`, `index.html`, `vite.config.ts`, `tsconfig*.json`, `vercel.json`, `package.json`. Do not edit a frozen file, another track's folder, or add a dependency. If a task truly needs a frozen change, stop and tell the user: it must be agreed with Marco and committed separately on `main`.
+Everything else is FROZEN: `src/app/**`, `src/store/**`, `src/lib/**`, `src/features/tables/**` (track B, finished), `src/features/event/**` and `src/features/guests/**` (track A, finished), `src/index.css`, `src/main.tsx`, `index.html`, `vite.config.ts`, `tsconfig*.json`, `vercel.json`, `package.json`. Do not edit a frozen file, another track's folder, or add a dependency. If a task truly needs a frozen change, stop and tell the user: it must be agreed with Marco and committed separately on `main`.
 
 Only mark tasks `[x]` in `tasks.md` for the active track. Do not edit other SDD artifacts (`proposal.md`, `specs/`, `design.md`) unless the user explicitly asks; if you find a contradiction, report it with file references.
 
@@ -39,9 +40,9 @@ Only mark tasks `[x]` in `tasks.md` for the active track. Do not edit other SDD 
 - Selectors: `src/store/selectors.ts` (`counters`, `unseatedGuests`, `seatNamesOf`, `occupancyOf`, `guestNamesById`, `seatedGuestIds`).
 - Types: `src/store/types.ts` (`Guest`, `Table` with optional `scale`, `Event`, `TableTemplate`, `SharePayload`). Constants: `src/lib/constants.ts`.
 - Geometry: `src/lib/geometry.ts`. Text helpers: `src/lib/text.ts` (`normalize`, `slugify`). Ids: `src/lib/ids.ts`.
-- Drag and drop: `src/lib/dnd.ts` (data shapes and id builders) and the frozen wrapper `src/app/dnd/GuestDraggable.tsx` (track A wraps sidebar cards with `from: null`). The single `DndContext` and all drop handling live in track B, already done.
+- Drag and drop: `src/lib/dnd.ts` (data shapes and id builders) and the frozen wrapper `src/app/dnd/GuestDraggable.tsx` (sidebar cards pass `from: null`). The single `DndContext` and all drop handling live in `src/features/tables/DndProvider.tsx`, done. Drop targets are the seat, the table disc and the sidebar (`SIDEBAR_DROP_ID`, RF-38).
 - Shared UI: `ConfirmDialog` (`src/app/ConfirmDialog.tsx`, never `window.confirm`), `toast()` from `src/app/useToastStore.ts`, `TableView` (`src/features/tables/TableView.tsx`; track C renders it read-only with `highlightSeatIndex`, no slots).
-- Placeholders that other files import and that must keep their default zero-prop export: `src/features/event/Topbar.tsx`, `EventForm.tsx`, `src/features/guests/GuestSidebar.tsx` (track A); `src/features/share/ShareButton.tsx`, `src/features/export/ExportButton.tsx`, `src/features/guest-view/GuestView.tsx` (track C).
+- Placeholders left for track C that other files import and that must keep their default zero-prop export: `src/features/share/ShareButton.tsx`, `src/features/export/ExportButton.tsx`, `src/features/guest-view/GuestView.tsx`. Track A's equivalents (`event/Topbar.tsx`, `event/EventForm.tsx`, `guests/GuestSidebar.tsx`) are implemented and frozen.
 
 ## 4. Coding rules
 
@@ -60,6 +61,7 @@ Known traps (each one has bitten a real project):
 - `/invitado` never imports `useEventStore`; it reads only the fragment. Invalid or missing fragment renders the fixed invalid-link message, never a blank page.
 - PNG export captures `#${CANVAS_NODE_ID}` (the fixed 1600x1200 inner node, not the scrolling container). That node carries `transform: scale(zoom)`; neutralise the transform during capture. Use `skipFonts: true`, `pixelRatio: 2`, `backgroundColor: '#ffffff'`, a `filter` that drops `[data-export-ignore]` nodes, and `await document.fonts.ready` first.
 - Sidebar cards become draggable only through `GuestDraggable`; do not add a second `DndContext` or your own sensors.
+- The sidebar is a drop target (RF-38) and is 300px wide by the full viewport height. In `collisionDetection` it is filtered out of the `rectIntersection` fallback so it only wins under the pointer. Removing that filter makes a drop over the empty canvas next to the panel unseat the guest by accident.
 
 ## 5. Working method (evidence first)
 

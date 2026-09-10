@@ -21,9 +21,9 @@ Este README es tu punto de entrada. Si el usuario te dice "leé el README y deci
 | # | Archivo | Para qué |
 |---|---|---|
 | 1 | `AGENTS.md` | Reglas completas: qué podés editar, qué está congelado, cómo verificar, cómo commitear. Obligatorio. |
-| 2 | `openspec/changes/mimesa-mvp/tasks.md` | La lista de tareas por track. Tu trabajo sale de acá. Buscá la sección de tu track (A o C) y la primera tarea sin marcar `[ ]`. |
-| 3 | `docs/tracks/track-a.md` o `docs/tracks/track-c.md` | La guía del track: alcance, archivos, contratos, orden, checklist de pruebas, criterio de terminado. |
-| 4 | `docs/requirements.md` | Los requerimientos RF-01 a RF-37. Cada tarea cita los suyos. |
+| 2 | `openspec/changes/mimesa-mvp/tasks.md` | La lista de tareas por track. Tu trabajo sale de acá. Buscá la sección de tu track (hoy solo queda C) y la primera tarea sin marcar `[ ]`. |
+| 3 | `docs/tracks/track-c.md` | La guía del track: alcance, archivos, contratos, orden, checklist de pruebas, criterio de terminado. `docs/tracks/track-a.md` queda como referencia de un track ya cerrado. |
+| 4 | `docs/requirements.md` | Los requerimientos RF-01 a RF-38. Cada tarea cita los suyos. |
 | 5 | `openspec/changes/mimesa-mvp/specs/<dominio>/spec.md` | Escenarios Given/When/Then del requerimiento que vas a implementar. Son el criterio de aceptación. |
 | 6 | `openspec/changes/mimesa-mvp/design.md` | Diseño técnico: tipos, acciones del store, drag and drop, geometría, link, exportación, dueño de cada archivo, **textos exactos en español**. |
 | 7 | `openspec/changes/mimesa-mvp/apply-progress.md` | Qué se hizo ya y en qué se desvió del diseño. Donde `design.md` y esto se contradigan, gana esto y el código en `src/`. |
@@ -37,7 +37,9 @@ Los archivos 1 a 9 son los que necesitás para trabajar. Los 10 a 12 te dan todo
 
 ### 2. Determiná el track
 
-Preguntale al usuario en qué track está si no te lo dijo. También se infiere del nombre de la rama: `feat/track-a-event-guests` es A, `feat/track-c-share-guestview-export` es C. El track B ya está hecho y mergeado en `main`; no se trabaja más ahí.
+Hoy el único track con tareas pendientes es **C**, rama `feat/track-c-share-guestview-export`. Los tracks A y B ya están hechos y mergeados en `main`; no se trabaja más ahí. Si el usuario te dice que está en A o en B, no arranques: decíselo y pará.
+
+Los cambios que cruzan los tres tracks (por ejemplo RF-38) no pertenecen a ninguna rama: se acuerdan con Marco y se hacen en una rama propia de `main`. Están en la sección "Post-merge changes" de `tasks.md`.
 
 ### 3. Decile al usuario qué hacer
 
@@ -53,7 +55,7 @@ Corré `npx tsc --noEmit -p tsconfig.app.json`. Después decile al usuario, en p
 
 ### 6. Cerrá la tarea
 
-Cuando el usuario confirme que el chequeo pasó: marcá la tarea `[x]` en `tasks.md`, hacé el commit con formato convencional y alcance del track (por ejemplo `feat(track-a): bulk guest input (RF-14)`), sin firmas de IA, y seguí con la próxima tarea. Cuando el track esté completo, guiá al usuario por la sección "Terminar el track y abrir el PR" de abajo.
+Cuando el usuario confirme que el chequeo pasó: marcá la tarea `[x]` en `tasks.md`, hacé el commit con formato convencional y alcance del track (por ejemplo `feat(track-c): share dialog with copy link (RF-28)`), sin firmas de IA, y seguí con la próxima tarea. Cuando el track esté completo, guiá al usuario por la sección "Terminar el track y abrir el PR" de abajo.
 
 ---
 
@@ -63,9 +65,11 @@ Cuando el usuario confirme que el chequeo pasó: marcá la tarea `[x]` en `tasks
 |---|---|---|
 | Fase 0, base congelada (scaffold, tokens, store, geometría, layout, `TableView`) | **Hecha y en `main`** | Marco |
 | Track B, plano, mesas, drag and drop, zoom, tamaño de mesa | **Hecho y mergeado en `main`** | Marco |
-| Track A, evento e invitados | **Pendiente, listo para arrancar** | Compañero 1 |
+| Track A, evento e invitados | **Hecho y mergeado en `main`** | Compañero 1 |
 | Track C, compartir, vista del invitado, exportar PNG | **Pendiente, listo para arrancar** | Compañero 2 |
-| Fase 4, integración y pruebas en el deploy | Después de mergear A y C | Los tres |
+| Fase 4, integración y pruebas en el deploy | Después de mergear C | Los tres |
+
+**Único track abierto: C.** Los tracks A y B ya están en `main` y no se trabaja más ahí. Si encontrás un problema en algo suyo, no lo arregles en tu rama: reportalo.
 
 ---
 
@@ -81,22 +85,21 @@ Cuando el usuario confirme que el chequeo pasó: marcá la tarea `[x]` en `tasks
    npm run dev
    ```
 
-   Abrí http://localhost:5173. Vas a ver un formulario placeholder con un botón que crea un evento demo. Tocalo: aparece la barra superior, el panel lateral y el plano con seis mesas. Eso es la base sobre la que trabajás. Click en una silla vacía te deja sentar a alguien, y arrastrar entre sillas ya funciona.
+   Abrí http://localhost:5173. Vas a ver el formulario de creación de evento: cargá nombre y fecha, elegí una plantilla y creá. Aparecen la barra superior con los contadores, el panel lateral de invitados y el plano con las mesas. Eso es la base sobre la que trabajás, con los tracks A y B ya adentro: pegá una lista de nombres en el panel, arrastralos a las sillas, movelos entre sillas y devolvelos al panel arrastrándolos de vuelta.
 
 3. Creá tu rama desde `main`, con este nombre exacto:
 
    ```bash
-   git checkout -b feat/track-a-event-guests main            # track A
-   git checkout -b feat/track-c-share-guestview-export main  # track C
+   git checkout -b feat/track-c-share-guestview-export main  # track C, el único abierto
    ```
 
-4. Leé tu guía en `docs/tracks/` y la lista de lectura de la sección de arriba (te sirve a vos igual que al agente).
+4. Leé tu guía en `docs/tracks/track-c.md` y la lista de lectura de la sección de arriba (te sirve a vos igual que al agente).
 5. Trabajá tarea por tarea siguiendo `openspec/changes/mimesa-mvp/tasks.md`, sección de tu track. Están en orden: primero lo que se ve en la demo.
 6. Cuando el track esté completo y probado en local, abrí el PR a `main` y avisale a Marco. Detalle más abajo.
 
 Si usás un agente de IA (Claude Code, Cursor, Codex u otro), decile:
 
-> Leé el README y decime qué hacer. Estoy en el track A.
+> Leé el README y decime qué hacer. Estoy en el track C.
 
 ---
 
@@ -120,8 +123,8 @@ No hay tests automatizados por decisión del equipo. La verificación es manual:
 |---|---|
 | `README.md` | Este archivo: protocolo, estado, cómo empezar, flujo de trabajo. |
 | `AGENTS.md`, `CLAUDE.md` | Reglas para agentes de IA. `CLAUDE.md` importa `AGENTS.md`. |
-| `docs/tracks/track-a.md`, `docs/tracks/track-c.md` | Guía de cada track pendiente. |
-| `docs/requirements.md` | Especificación de requerimientos RF-01 a RF-37. |
+| `docs/tracks/track-c.md` | Guía del track pendiente. `docs/tracks/track-a.md` queda como referencia del track ya cerrado. |
+| `docs/requirements.md` | Especificación de requerimientos RF-01 a RF-38. |
 | `docs/design/*.dc.html` | Las seis pantallas diseñadas. |
 | `DESIGN.md` | Sistema de diseño. |
 | `PRODUCT.md` | Contexto de producto. |
@@ -142,13 +145,15 @@ Cada track es dueño de sus carpetas y de nada más. Como no comparten archivos,
 
 | Track | Rama | Carpetas propias | Requerimientos |
 |---|---|---|---|
-| A | `feat/track-a-event-guests` | `src/features/event/**`, `src/features/guests/**` | RF-01 a RF-05, RF-13 a RF-19, RF-26 |
+| A (hecho) | `feat/track-a-event-guests` | `src/features/event/**`, `src/features/guests/**` | RF-01 a RF-05, RF-13 a RF-19, RF-26 |
 | B (hecho) | `feat/track-b-canvas-dnd` | `src/features/tables/**` menos `TableView.tsx` | RF-06 a RF-12, RF-20 a RF-25, RF-36, RF-37 |
 | C | `feat/track-c-share-guestview-export` | `src/features/share/**`, `src/features/guest-view/**`, `src/features/export/**` | RF-27 a RF-35 |
 
+RF-38 no está en la tabla a propósito: se acordó después de la división y toca la base, el panel lateral (A) y el `DndProvider` (B), así que se hizo en una rama propia de `main`.
+
 ### Archivos congelados
 
-Todo lo que está en `src/app/**`, `src/store/**`, `src/lib/**`, `src/features/tables/**`, `src/index.css`, `src/main.tsx`, `index.html`, `vite.config.ts`, `tsconfig*.json`, `vercel.json` y `package.json` es la base compartida o el track B ya terminado. **No se toca desde una rama de track.** Tampoco se agregan dependencias.
+Todo lo que está en `src/app/**`, `src/store/**`, `src/lib/**`, `src/features/tables/**`, `src/features/event/**`, `src/features/guests/**`, `src/index.css`, `src/main.tsx`, `index.html`, `vite.config.ts`, `tsconfig*.json`, `vercel.json` y `package.json` es la base compartida o un track ya terminado (A y B). **No se toca desde una rama de track.** Tampoco se agregan dependencias.
 
 Si una tarea te obliga a cambiar algo de ahí, no lo cambies: escribile a Marco explicando qué necesitás y por qué. Se decide entre los tres y se hace en un commit aparte en `main`, y después vos mergeás `main` en tu rama.
 
@@ -208,6 +213,7 @@ Si el track es grande, podés abrir un primer PR con las tareas M (las imprescin
 ### Trampas conocidas
 
 - **Drag and drop**: hay un solo `DndContext` (en `AppLayout`). Para hacer arrastrable una tarjeta del panel se usa `GuestDraggable` de `src/app/dnd/` con `from: null`. El sensor tiene `activationConstraint: { distance: 5 }` para que click y doble click convivan con el arrastre.
+- **El panel lateral es un drop target** (RF-38): soltar ahí un invitado sentado lo devuelve a "Sin ubicar". Como mide 300 px por toda la altura, solo gana la colisión cuando el puntero está adentro, y está filtrado del fallback `rectIntersection`. Si tocás `collisionDetection`, no rompas ese filtro: sin él, soltar sobre el plano vacío cerca del panel desasigna al invitado sin querer.
 - **Link del invitado**: el payload comprimido con lz-string se escribe y se lee crudo en el fragmento (`/invitado#...`). Nunca pasarlo por `encodeURIComponent` ni `URLSearchParams`: rompe el link en silencio.
 - **QR**: si el link supera 1.200 caracteres, mostrar solo el botón de copiar. `qrcode.react` lanza una excepción al renderizar si se pasa del límite; un `try/catch` no lo salva.
 - **Vista del invitado**: nunca importar el store en `/invitado`. Esa ruta lee solo el fragmento de la URL.
@@ -228,5 +234,5 @@ Ninguna es obligatoria.
 
 - Agregar a los dos compañeros como colaboradores del repo.
 - Conectar Vercel al repo: `main` se publica automáticamente y cada rama tiene su preview.
-- Revisar y mergear los PR de A y C. Cambios en archivos congelados: solo en `main`, en commit aparte, avisando al grupo.
-- Cuando A y C estén mergeados, correr la Fase 4 de `tasks.md` sobre el deploy.
+- Revisar y mergear el PR de C. Cambios en archivos congelados: solo en `main`, en commit aparte, avisando al grupo.
+- Cuando C esté mergeado, correr la Fase 4 de `tasks.md` sobre el deploy.
