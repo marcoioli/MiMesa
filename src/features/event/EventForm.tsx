@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   MAX_CAPACITY,
@@ -14,6 +15,7 @@ type TemplateOption = '6x8' | '10x10' | '8x6' | 'custom';
 
 export default function EventForm() {
   const createEvent = useEventStore((s) => s.createEvent);
+  const navigate = useNavigate();
 
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
@@ -87,13 +89,37 @@ export default function EventForm() {
     }
 
     createEvent(trimmedName, trimmedDate, trimmedPlace || undefined, finalTemplate);
+    navigate('/plano');
   };
 
   return (
     <div className="flex min-h-screen flex-col bg-ground">
-      <header className="flex h-14 flex-none items-center gap-2.5 border-b border-line bg-panel px-5">
-        <img src="/logo.svg" alt="" className="h-8 w-8" />
-        <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink">MiMesa</span>
+      <header className="flex h-14 flex-none items-center gap-4 border-b border-line bg-panel px-5">
+        <Link
+          to="/"
+          className="flex items-center gap-2 rounded focus:outline-none focus:ring-2 focus:ring-accent-soft"
+        >
+          <img src="/logo-mark.png" alt="" width={28} height={28} className="h-7 w-7" />
+          <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink">MiMesa</span>
+        </Link>
+
+        <Link
+          to="/"
+          className="ml-auto inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-bold text-ink-2 transition hover:bg-ground hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent-soft"
+        >
+          <svg
+            className="h-3.5 w-3.5 stroke-current stroke-[2]"
+            viewBox="0 0 24 24"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M19 12H5" />
+            <path d="m12 19-7-7 7-7" />
+          </svg>
+          Volver
+        </Link>
       </header>
 
       <main className="flex flex-1 items-center justify-center p-6 md:p-10">

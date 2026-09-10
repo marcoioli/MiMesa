@@ -54,6 +54,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 | RF-01 | Crear un evento con nombre (obligatorio), fecha (obligatoria) y lugar (opcional). | M | S |
 | RF-02 | Editar nombre, fecha y lugar del evento en cualquier momento. | M | S |
 | RF-03 | "Nuevo evento" borra todo el estado actual, previa confirmación. | M | S |
+| RF-41 | La aplicación abre en una pantalla de inicio con el logo, la bajada del producto y un bloque "Tus eventos". Si no hay evento guardado muestra el estado vacío y el botón "Crear evento", que lleva al formulario de creación. Si hay uno, muestra su tarjeta con nombre, fecha, lugar y contadores de mesas, invitados y sentados, con "Abrir plano" y "Eliminar", más "Crear uno nuevo" que avisa que el evento actual se va a borrar. | S | M |
 
 ### 4.2 Mesas
 
@@ -134,7 +135,9 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 
 | Ruta | Pantalla | Contenido |
 |---|---|---|
-| `/` | Editor | Si no hay evento: formulario de creación (RF-01, RF-04). Si hay evento: barra superior (nombre, contadores, Autoubicar, Vaciar todo, Compartir, Exportar PNG, Nuevo evento), panel lateral de invitados y plano con las mesas. |
+| `/` | Inicio | Logo, bajada y bloque "Tus eventos": tarjeta del evento guardado con sus contadores, o estado vacío con "Crear evento" (RF-41). |
+| `/nuevo` | Creación | Formulario de creación con la vista previa de la plantilla (RF-01, RF-04). Al crear, redirige a `/plano`. |
+| `/plano` | Editor | Barra superior (nombre, contadores, Autoubicar, Vaciar todo, Compartir, Exportar PNG, Nuevo evento), panel lateral de invitados y plano con las mesas. Sin evento redirige a `/`. |
 | `/invitado#<estado>` | Vista del invitado | Cabecera del evento, buscador de nombre y resultado con el dibujo de la mesa. |
 
 ## 7. Modelo de datos

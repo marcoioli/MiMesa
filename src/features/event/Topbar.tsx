@@ -57,7 +57,7 @@ export default function Topbar() {
   return (
     <header className="flex h-14 flex-none items-center gap-4 border-b border-line bg-panel pl-5 pr-4">
       <div className="flex items-center gap-2 flex-none">
-        <img src="/logo-mark.svg" alt="" width="28" height="28" className="h-7 w-7" />
+        <img src="/logo-mark.png" alt="" width="28" height="28" className="h-7 w-7" />
         <span className="text-[15px] font-extrabold tracking-[-0.02em] text-ink">MiMesa</span>
       </div>
 

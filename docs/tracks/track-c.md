@@ -26,7 +26,7 @@ La salida del producto: el diálogo "Compartir" con link y QR, la vista del invi
 
 ## Logo
 
-En la vista del invitado usá `/logo-mark.svg` (20 px) junto al texto "MiMesa" en el encabezado, como en el mockup. Detalle en `DESIGN.md`, sección "Logo".
+En la vista del invitado usá `/logo-mark.png` (20 px) junto al texto "MiMesa" en el encabezado, como en el mockup. Detalle en `DESIGN.md`, sección "Logo".
 
 ## Pantallas a copiar
 
