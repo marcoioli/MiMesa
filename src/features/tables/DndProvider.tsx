@@ -88,7 +88,7 @@ const collisionDetection: CollisionDetection = (args) => {
   const within = pointerWithin(args);
   // The sidebar is a full-height 300px target, so it only ever wins under the
   // pointer: in the overlap fallback it would swallow drops meant for the empty
-  // canvas beside it and unseat the guest by accident (RF-24).
+  // canvas beside it and unseat the guest by accident (RF-38).
   const hits =
     within.length > 0
       ? within
@@ -191,7 +191,7 @@ export default function DndProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // RF-24: released over the sidebar, a seated guest goes back to "Sin ubicar".
+    // RF-38: released over the sidebar, a seated guest goes back to "Sin ubicar".
     // A guest dragged out of the sidebar and back is already unseated: no-op.
     if (drop.type === 'sidebar') {
       setRejection(null);

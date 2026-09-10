@@ -92,6 +92,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 | RF-22 | Si la mesa o la silla está ocupada, el drop se rechaza con una señal visual y el invitado vuelve a donde estaba. | M | S |
 | RF-23 | Arrastrar un invitado ya sentado a otra silla o mesa lo mueve. | S | S |
 | RF-24 | Click sobre un invitado sentado abre un menú con "Quitar de la mesa" (vuelve al panel lateral) y "Eliminar invitado". | M | S |
+| RF-38 | Arrastrar un invitado ya sentado y soltarlo sobre el panel lateral lo quita de la mesa y lo devuelve a "Sin ubicar". El panel se resalta mientras el invitado está encima. Soltar fuera del panel, sobre el plano vacío, deja al invitado en su silla. | S | S |
 | RF-25 | Click sobre una silla vacía abre un selector con la lista de invitados sin ubicar (con buscador) y un campo "Nuevo invitado" para escribir un nombre y sentarlo directamente. | M | M |
 | RF-26 | "Autoubicar": sienta a todos los invitados sin ubicar, en el orden del panel, en las sillas libres recorriendo las mesas en orden. Si no alcanzan las sillas, los restantes quedan en el panel y se muestra un aviso. | S | S |
 
@@ -245,6 +246,8 @@ La base común se hace primero y en conjunto: scaffold, store con el contrato de
 | A | Evento e invitados | RF-01 a RF-05, RF-13 a RF-19, RF-26 |
 | B | Plano, mesas y drag and drop | RF-06 a RF-12, RF-20 a RF-25, RF-36, RF-37 |
 | C | Compartir, vista del invitado y exportación | RF-27 a RF-35 |
+
+RF-38 se acordó después de esta división y se implementó directamente en `main`: toca el contrato de drag and drop de la base, el panel lateral (módulo A) y el `DndProvider` (módulo B), así que no pertenece a ninguna de las tres ramas.
 
 El detalle de tareas, orden y dependencias se define en el SDD.
 

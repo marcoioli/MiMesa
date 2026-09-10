@@ -17,7 +17,7 @@ export default function GuestSidebar() {
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  // RF-24: the whole panel is one drop target, so a seated guest can be released
+  // RF-38: the whole panel is one drop target, so a seated guest can be released
   // anywhere over "Sin ubicar" and return to the list instead of to its seat.
   const { setNodeRef, isOver, active } = useDroppable({
     id: SIDEBAR_DROP_ID,

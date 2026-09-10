@@ -144,10 +144,19 @@ M-priority tasks (C.1-C.7) come before S-priority tasks (C.8-C.9).
 
 ---
 
+## Post-merge changes (agreed with the product owner, made on `main`)
+
+Changes that cross the track boundaries and therefore belong to no branch. Each one needs an
+explicit agreement before it is written, and a requirement id in `docs/requirements.md` first.
+
+- [x] M.1 RF-38 (reverses decision D11): add `SidebarDropData` and `SIDEBAR_DROP_ID` to `src/lib/dnd.ts`, make the `<aside>` of `src/features/guests/GuestSidebar.tsx` a `useDroppable` carrying `{ type: 'sidebar' }` with the accent drop-target treatment while a **seated** guest hovers it, and handle the sidebar drop in `src/features/tables/DndProvider.tsx` by calling `unseatGuest` when `data.from !== null`. Filter the sidebar out of the `rectIntersection` fallback in `collisionDetection` so it only wins under the pointer. **Done when**: dragging a seated guest onto the panel empties the seat and lists the guest under `Sin ubicar`; releasing over the empty canvas beside the panel keeps the seat; dragging an already-unseated guest onto the panel does nothing. (S)
+
+---
+
 ## Phase 4: Integration (after A, B and C merge into `main`)
 
 - [ ] 4.1 Merge the three branches into `main` in any order and confirm no frozen file changed outside the Phase 0 commit (`git diff --stat` against the base commit for `src/app/**`, `src/store/**`, `src/lib/**`, `src/features/tables/TableView.tsx`). **Done when**: the merge is conflict-free and `npx tsc --noEmit` plus `npm run build` pass on `main`. (S)
-- [ ] 4.2 Run the RF-01..RF-35 smoke checklist on the Vercel production deploy in desktop Chrome, using `docs/requirements.md` (read-only) section 4 as the ID list: event lifecycle (RF-01..03), templates and tables (RF-04..13), guests (RF-14..19), seating (RF-20..26), persistence (RF-27). **Done when**: every one of those 27 IDs is ticked or has a recorded defect. (M)
+- [ ] 4.2 Run the RF-01..RF-35 smoke checklist on the Vercel production deploy in desktop Chrome, using `docs/requirements.md` (read-only) section 4 as the ID list: event lifecycle (RF-01..03), templates and tables (RF-04..13), guests (RF-14..19), seating (RF-20..26 plus RF-38), persistence (RF-27). **Done when**: every one of those 27 IDs is ticked or has a recorded defect. (M)
 - [ ] 4.3 Verify the share and export chain end to end on the deploy: copy the link, open it in a private window, search a duplicated name, and export the PNG (RF-28..RF-33, RF-35). **Done when**: the link decodes with no editor data leaking in, both duplicates are listed, the right seat is highlighted, and the PNG downloads complete. (S)
 - [ ] 4.4 RF-34 mobile check: open the shared link on a real phone (or 360x640 emulation) and complete a search-and-select. **Done when**: no horizontal scrolling, the table drawing is legible, and the match is selectable by tap. (S)
 - [ ] 4.5 Scale check: share a ~60-guest event (QR path) and a ~200-guest event (copy-link fallback path) from the deploy. **Done when**: the 60-guest link renders a scannable QR, the 200-guest dialog renders the note and copies without crashing, and both links open correctly in the guest view. (S)
