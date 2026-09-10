@@ -151,6 +151,8 @@ explicit agreement before it is written, and a requirement id in `docs/requireme
 
 - [x] M.1 RF-38 (reverses decision D11): add `SidebarDropData` and `SIDEBAR_DROP_ID` to `src/lib/dnd.ts`, make the `<aside>` of `src/features/guests/GuestSidebar.tsx` a `useDroppable` carrying `{ type: 'sidebar' }` with the accent drop-target treatment while a **seated** guest hovers it, and handle the sidebar drop in `src/features/tables/DndProvider.tsx` by calling `unseatGuest` when `data.from !== null`. Filter the sidebar out of the `rectIntersection` fallback in `collisionDetection` so it only wins under the pointer. **Done when**: dragging a seated guest onto the panel empties the seat and lists the guest under `Sin ubicar`; releasing over the empty canvas beside the panel keeps the seat; dragging an already-unseated guest onto the panel does nothing. (S)
 
+- [x] M.2 RF-39: in `src/features/tables/DndProvider.tsx` replace `rejects()` with `outcomeOf()` returning `ok | swap | reject`, add the two-seat `swap` state to `DndFeedback` as `isSwapSeat(tableId, seatIndex)`, and perform the trade in `handleDragEnd` with the existing actions in this order: `unseatGuest(occupant)`, `seatGuest(dragged, target)`, `seatGuest(occupant, origin)`, restoring the occupant if the middle call fails. In `src/features/tables/TableNode.tsx` give `SeatDroppable` a `swapping` prop drawing the accent ring plus an `accent-soft` halo, which wins over the plain hover ring. No new store action. **Done when**: dragging a seated guest onto another seated guest lights both seats, releasing swaps them and shows the message with both names, and dragging a sidebar guest onto an occupied seat is still refused in red. (M)
+
 ---
 
 ## Phase 4: Integration (after A, B and C merge into `main`)

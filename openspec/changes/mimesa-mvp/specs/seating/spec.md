@@ -93,6 +93,32 @@ at least 5 pixels.
 - WHEN the organizer presses and releases without moving 5 pixels
 - THEN the menu opens and no seat assignment changed
 
+### Requirement: Swap two seated guests by dragging (RF-39)
+
+Dropping a guest who came from a seat onto a seat occupied by someone else MUST make the two
+trade places in one operation: each ends up on the other's seat and neither is left unseated.
+While the pointer offers that trade, both seats MUST draw the accent ring instead of the RF-22
+red one, and the release MUST announce it with a message naming both guests. A guest dragged
+from the sidebar has no seat to give in return, so an occupied seat MUST still refuse it.
+
+#### Scenario: Two seated guests trade places
+
+- GIVEN "Ana" occupies seat 1 of "Mesa 1" and "Juan" occupies seat 4 of "Mesa 5"
+- WHEN the organizer drags "Ana" onto seat 4 of "Mesa 5" and releases
+- THEN "Ana" occupies seat 4 of "Mesa 5", "Juan" occupies seat 1 of "Mesa 1", and the counters are unchanged
+
+#### Scenario: The offered swap is announced before the release
+
+- GIVEN "Ana" occupies seat 1 of "Mesa 1" and "Juan" occupies seat 4 of "Mesa 5"
+- WHEN the organizer holds "Ana" over seat 4 of "Mesa 5" without releasing
+- THEN both seat 1 of "Mesa 1" and seat 4 of "Mesa 5" show the accent ring and neither shows the red one
+
+#### Scenario: A guest from the sidebar cannot swap
+
+- GIVEN "Pedro" is unseated and "Juan" occupies seat 4 of "Mesa 5"
+- WHEN the organizer drags "Pedro" onto seat 4 of "Mesa 5"
+- THEN the drop is refused with the red ring, "Juan" keeps his seat, and "Pedro" stays unseated
+
 ### Requirement: Unseat by dragging to the sidebar (RF-38)
 
 The unseated-guest sidebar MUST be a drop target. Releasing a seated guest anywhere over the

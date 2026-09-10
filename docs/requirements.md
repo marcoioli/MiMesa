@@ -93,6 +93,7 @@ Tamaño estimado: **S** = pocas horas, **M** = alrededor de un día.
 | RF-23 | Arrastrar un invitado ya sentado a otra silla o mesa lo mueve. | S | S |
 | RF-24 | Click sobre un invitado sentado abre un menú con "Quitar de la mesa" (vuelve al panel lateral) y "Eliminar invitado". | M | S |
 | RF-38 | Arrastrar un invitado ya sentado y soltarlo sobre el panel lateral lo quita de la mesa y lo devuelve a "Sin ubicar". El panel se resalta mientras el invitado está encima. Soltar fuera del panel, sobre el plano vacío, deja al invitado en su silla. | S | S |
+| RF-39 | Arrastrar un invitado ya sentado y soltarlo sobre una silla ocupada intercambia a los dos: cada uno queda en la silla del otro. Mientras se lo arrastra encima, las dos sillas se marcan en color de acento en vez del rechazo rojo, y al soltar se muestra un aviso con los dos nombres. Un invitado que viene del panel lateral no tiene silla para dar, así que sobre una silla ocupada sigue siendo rechazado (RF-22). | S | M |
 | RF-25 | Click sobre una silla vacía abre un selector con la lista de invitados sin ubicar (con buscador) y un campo "Nuevo invitado" para escribir un nombre y sentarlo directamente. | M | M |
 | RF-26 | "Autoubicar": sienta a todos los invitados sin ubicar, en el orden del panel, en las sillas libres recorriendo las mesas en orden. Si no alcanzan las sillas, los restantes quedan en el panel y se muestra un aviso. | S | S |
 
