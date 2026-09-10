@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { SharePayload } from '../../store/types';
 import { readSharePayload } from '../share/encode';
+import GuestSearch, { type GuestMatch } from './GuestSearch';
 
 const MONTHS = [
   'enero',
@@ -33,10 +34,13 @@ function formatGuestDate(isoDate: string): string {
  */
 export default function GuestView() {
   const [hash, setHash] = useState(() => (typeof window !== 'undefined' ? window.location.hash : ''));
-  const [query, setQuery] = useState('');
+  const [_selectedMatch, setSelectedMatch] = useState<GuestMatch | null>(null);
 
   useEffect(() => {
-    const onHashChange = () => setHash(window.location.hash);
+    const onHashChange = () => {
+      setHash(window.location.hash);
+      setSelectedMatch(null);
+    };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
@@ -76,36 +80,8 @@ export default function GuestView() {
         {metaText && <p className="text-[15px] font-semibold text-ink-3">{metaText}</p>}
       </div>
 
-      {/* Search Input */}
-      <div className="flex flex-col gap-2.5">
-        <label htmlFor="guest-search-input" className="text-[14px] font-extrabold text-ink">
-          Buscá tu nombre
-        </label>
-        <div className="relative flex h-[52px] items-center rounded-xl border-2 border-line-2 bg-panel px-3.5 transition focus-within:border-accent focus-within:ring-4 focus-within:ring-accent-soft">
-          <svg
-            className="mr-2.5 h-5 w-5 flex-none stroke-ink-3 stroke-[2]"
-            viewBox="0 0 24 24"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-3.5-3.5" />
-          </svg>
-          <input
-            id="guest-search-input"
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Escribí tu nombre..."
-            className="w-full bg-transparent text-[16px] font-semibold text-ink outline-none placeholder:font-medium placeholder:text-ink-3"
-          />
-        </div>
-        <p className="text-[13px] font-medium text-ink-3">
-          Podés escribir solo el nombre o el apellido, sin acentos.
-        </p>
-      </div>
+      {/* Search Input and Matches */}
+      <GuestSearch payload={payload} onSelectMatch={(match) => setSelectedMatch(match)} />
 
       {/* Help card */}
       <div className="mt-auto flex flex-col gap-1.5 rounded-xl border border-line bg-panel p-4">
