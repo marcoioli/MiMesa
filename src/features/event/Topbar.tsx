@@ -57,7 +57,7 @@ export default function Topbar() {
 
   return (
     <header className="flex flex-none flex-col border-b border-line bg-panel md:h-14 md:flex-row md:items-center md:justify-between md:gap-3 md:px-4">
-      {/* Left side: Logo (link to home), divider, event name, and auto-save indicator */}
+      {/* Left: Logo (link to home), event title edit button, and auto-saved indicator */}
       <div className="flex min-w-0 items-center gap-2.5 px-4 pb-1 pt-2 md:contents">
         <Link
           to="/"
@@ -115,7 +115,7 @@ export default function Topbar() {
         </div>
       </div>
 
-      {/* Right side: Counters and actions */}
+      {/* Right: Counters and actions */}
       <div className="flex items-center gap-3 overflow-x-auto whitespace-nowrap px-4 pb-2 md:contents">
         <div className="flex flex-none items-center gap-3 lg:gap-4 md:ml-auto">
           <div className="flex items-baseline gap-1 text-[11px] lg:text-[12px] font-bold text-ink-3">
