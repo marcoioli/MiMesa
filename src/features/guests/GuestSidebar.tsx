@@ -1,5 +1,8 @@
+import { useDroppable } from '@dnd-kit/core';
 import { useState } from 'react';
 
+import type { DragData, SidebarDropData } from '../../lib/dnd';
+import { SIDEBAR_DROP_ID } from '../../lib/dnd';
 import { normalize } from '../../lib/text';
 import { unseatedGuests } from '../../store/selectors';
 import { useEventStore } from '../../store/useEventStore';
@@ -14,13 +17,27 @@ export default function GuestSidebar() {
 
   const [searchQuery, setSearchQuery] = useState('');
 
+  // RF-24: the whole panel is one drop target, so a seated guest can be released
+  // anywhere over "Sin ubicar" and return to the list instead of to its seat.
+  const { setNodeRef, isOver, active } = useDroppable({
+    id: SIDEBAR_DROP_ID,
+    data: { type: 'sidebar' } satisfies SidebarDropData,
+  });
+  const dragged = active?.data.current as DragData | undefined;
+  const willUnseat = isOver && dragged?.type === 'guest' && dragged.from !== null;
+
   const normalizedQuery = normalize(searchQuery);
   const visibleGuests = normalizedQuery
     ? unseated.filter((guest) => normalize(guest.name).includes(normalizedQuery))
     : unseated;
 
   return (
-    <aside className="flex w-[300px] flex-none flex-col border-r border-line bg-panel">
+    <aside
+      ref={setNodeRef}
+      className={`flex w-[300px] flex-none flex-col border-r transition-colors ${
+        willUnseat ? 'border-accent bg-accent-soft' : 'border-line bg-panel'
+      }`}
+    >
       <div className="flex items-baseline justify-between px-4 pb-2.5 pt-4">
         <span className="text-[14px] font-extrabold tracking-[-0.01em] text-ink">Sin ubicar</span>
         <span className="text-[12px] font-bold text-ink-3 tabular-nums">

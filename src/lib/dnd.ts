@@ -2,8 +2,9 @@
  * Frozen (Phase 0). The drag-and-drop contract tracks A and B compile against
  * (RF-20..RF-23). Shapes and id builders follow design.md "Drag and Drop".
  *
- * Track A only produces `GuestDragData` with `from: null` (sidebar cards);
- * track B produces the seated variant, both table payloads and every drop id.
+ * Track A produces `GuestDragData` with `from: null` (sidebar cards) and the
+ * sidebar drop target; track B produces the seated variant, both table payloads
+ * and every table-side drop id.
  */
 
 /** A guest being dragged, either from the sidebar (`from: null`) or from a seat. */
@@ -29,7 +30,13 @@ export type SeatDropData = { type: 'seat'; tableId: string; seatIndex: number };
 /** The table disc as a drop target: seats into the first free seat (RF-21). */
 export type TableDropData = { type: 'table'; tableId: string };
 
-export type DropData = SeatDropData | TableDropData;
+/** The unseated sidebar as a drop target: releases a seated guest back to it (RF-24). */
+export type SidebarDropData = { type: 'sidebar' };
+
+export type DropData = SeatDropData | TableDropData | SidebarDropData;
+
+/** Fixed id: the sidebar is a single droppable, so it needs no builder. */
+export const SIDEBAR_DROP_ID = 'sidebar';
 
 export const guestDragId = (guestId: string): string => `guest:${guestId}`;
 export const tableDragId = (tableId: string): string => `tablemove:${tableId}`;
