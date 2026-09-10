@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+
 export type ConfirmDialogProps = {
   open: boolean;
   message: string;
@@ -8,7 +10,7 @@ export type ConfirmDialogProps = {
 
 /**
  * The only confirmation surface in the app (RF-03, RF-06, RF-13, RF-17).
- * window.confirm is never used: it cannot be styled and it blocks the canvas.
+ * Portalled to document.body to avoid being trapped in transformed ancestors (e.g. canvas zoom).
  */
 export default function ConfirmDialog({
   open,
@@ -19,7 +21,7 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       data-export-ignore="true"
       role="presentation"
@@ -38,19 +40,20 @@ export default function ConfirmDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="h-8 rounded-lg border border-line-2 bg-panel px-3 text-[12px] font-bold text-ink"
+            className="h-8 rounded-lg border border-line-2 bg-panel px-3 text-[12px] font-bold text-ink cursor-pointer hover:bg-ground"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className="h-8 rounded-lg border border-accent bg-accent px-3 text-[12px] font-bold text-white"
+            className="h-8 rounded-lg border border-accent bg-accent px-3 text-[12px] font-bold text-white cursor-pointer hover:opacity-95"
           >
             {confirmLabel}
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
