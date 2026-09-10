@@ -92,11 +92,10 @@ ignoring letter case and diacritics. An empty search field MUST show the whole u
 
 ### Requirement: Find a seated guest and point the plan at them (RF-40)
 
-The RF-18 search MUST also match guests who already hold a seat, who are absent from the
-sidebar list by definition. Those matches MUST appear in their own "Ya sentados" block, each
-naming the table its guest sits at. Choosing one MUST bring that table into the middle of the
-canvas viewport and mark that guest's seat for a few seconds, after which the mark clears on
-its own. The mark MUST NOT reach the PNG export.
+The RF-18 search MUST also match guests who already hold a seat. Those matches MUST appear
+under "Ya sentados", inside the group of the table each one sits at (RF-43). Choosing one MUST
+bring that table into the middle of the canvas viewport and mark that guest's seat for a few
+seconds, after which the mark clears on its own. The mark MUST NOT reach the PNG export.
 
 #### Scenario: A seated guest is found and pointed at
 
@@ -108,13 +107,48 @@ its own. The mark MUST NOT reach the PNG export.
 
 - GIVEN "Ana Rossi" is seated and "Ana Gómez" is unseated
 - WHEN the organizer types "ana"
-- THEN "Ana Gómez" appears as a draggable sidebar card and "Ana Rossi" appears under "Ya sentados" with her table name
+- THEN "Ana Gómez" appears as a draggable card under "Sin ubicar" and "Ana Rossi" appears under "Ya sentados", inside the group of her table
 
 #### Scenario: The mark clears itself
 
 - GIVEN a seat marked by a search
 - WHEN a few seconds pass with no further action
 - THEN the mark is gone and the plan is otherwise unchanged
+
+### Requirement: The panel lists every guest, seated ones grouped by table (RF-43)
+
+The sidebar MUST list every guest of the event, not only the unseated ones, and MUST do so
+with or without a search. It MUST be split into a "Sin ubicar" section holding the draggable
+cards and a "Ya sentados" section grouping the seated guests under the table each one sits at.
+Every table group MUST be foldable from its own subtitle, which MUST carry the table name and
+how many guests it holds. Folding MUST be ignored while a search is active, so no match can
+hide inside a folded group, and the fold state MUST survive clearing that search. The fold
+state MUST NOT be persisted. Rows under "Ya sentados" MUST NOT be draggable, because the panel
+is itself the RF-38 unseat target and a short drag would silently unseat the guest.
+
+#### Scenario: Seated guests are listed without searching
+
+- GIVEN eight guests are seated across "Mesa 1" and "Mesa 2" and three are unseated
+- WHEN the organizer looks at the panel with an empty search field
+- THEN the three are listed under "Sin ubicar" and the eight under "Ya sentados", grouped under "Mesa 1" and "Mesa 2"
+
+#### Scenario: A table group folds away
+
+- GIVEN "Mesa 1" is showing its guests
+- WHEN the organizer clicks the "Mesa 1" subtitle
+- THEN its guests are hidden, its count stays visible, and the other groups are untouched
+
+#### Scenario: A search reaches inside a folded group
+
+- GIVEN "Mesa 1" is folded and "Ana" is seated at it
+- WHEN the organizer types "ana"
+- THEN Ana is visible under "Mesa 1", and clearing the search folds "Mesa 1" again
+
+#### Scenario: Every guest is seated
+
+- GIVEN every guest of the event holds a seat
+- WHEN the organizer looks at the panel
+- THEN "Sin ubicar" says that all the guests are placed and "Ya sentados" lists all of them
 
 ### Requirement: Topbar counters (RF-19)
 
